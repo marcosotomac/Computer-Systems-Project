@@ -7,14 +7,14 @@
 
 ---
 
-## 📋 Descripción general
+## Descripción general
 
 El Escenario 2 representa la simulación de un _scheduler_ con **prioridades impuestas** en un sistema operativo para un satélite.  
 Los procesos ya no se ejecutan de manera secuencial como en el escenario anterior: ahora existe una **jerarquía de prioridad fija (P1 > P3 > P2)**, y el sistema debe ser capaz de **interrumpir procesos**, registrar los cambios y **detectar pérdidas de información** cuando la conmutación ocurre entre procesos no consecutivos.
 
 ---
 
-## ⚙️ Objetivos principales
+## Objetivos principales
 
 - Implementar un _scheduler preemptivo_ con prioridad fija.
 - Detectar y reportar pérdidas de información cuando hay cambios abruptos entre procesos no consecutivos.
@@ -23,7 +23,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ---
 
-## 🧩 Procesos
+## Procesos
 
 | Proceso                    | Descripción                                               | Condición   |
 | -------------------------- | --------------------------------------------------------- | ----------- |
@@ -35,7 +35,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ---
 
-## 🧠 Lógica de funcionamiento
+## Lógica de funcionamiento
 
 1. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
 2. **Eventos anómalos:** Si la temperatura supera 100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
@@ -45,7 +45,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ---
 
-## 🧮 Diagrama de flujo
+## Diagrama de flujo
 
 ```mermaid
 flowchart TD
@@ -64,7 +64,7 @@ flowchart TD
 
 ---
 
-## 💻 Ejecución del programa
+## Ejecución del programa
 
 ```bash
 gcc escenario2.c -o escenario2
@@ -80,7 +80,7 @@ spike pk escenario2
 
 ---
 
-## 📈 Ejemplo de salida
+## Ejemplo de salida
 
 ```
 === ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
@@ -104,7 +104,7 @@ Pérdidas (B): P1=8, P3=16, P2=2
 
 ---
 
-## 🧠 Observaciones técnicas
+## Observaciones técnicas
 
 - Las conmutaciones se registran con indicador visual (`↔️` normal, `🔁` abrupto).
 - Las pérdidas simuladas se basan en datos no transmitidos o muestras no guardadas.
@@ -113,7 +113,7 @@ Pérdidas (B): P1=8, P3=16, P2=2
 
 ---
 
-## 📚 Referencias
+## Referencias
 
 - Patterson, D. A., & Hennessy, J. L. (2020). _Computer Organization and Design, RISC‑V Edition._ Morgan Kaufmann.
 - Silberschatz, A., Galvin, P. B., & Gagne, G. (2015). _Operating System Concepts._ Wiley.
