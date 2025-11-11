@@ -1,4 +1,4 @@
-# 🛰️ Escenario 2 – Prioridad impuesta con conmutación y detección de pérdidas
+# Escenario 2 – Prioridad impuesta con conmutación y detección de pérdidas
 
 ### Proyecto Final – Sistemas Computacionales
 
@@ -49,16 +49,16 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ```mermaid
 flowchart TD
-    A([Inicio del sistema]) --> B[Leer temperatura (P1)]
-    B --> C{Temperatura >= 100 C?}
-    C -->|Sí| D[Salto a P2 (Cambio abrupto)]
-    C -->|No| E[Continuar según prioridad]
-    E --> F[Ejecutar P3 (UART)]
-    D --> G[Registrar pérdida de datos]
+    A([Inicio del sistema]) --> B[Leer temperatura P1]
+    B --> C{Temperatura >= 100C?}
+    C -->|Si| D[Salto a P2 (Cambio abrupto)]
+    C -->|No| E[Continuar segun prioridad]
+    E --> F[Ejecutar P3 UART]
+    D --> G[Registrar perdida de datos]
     F --> H[Actualizar PC y cambiar de proceso]
     G --> H
-    H --> I[Incrementar tiempo (+5 min)]
-    I -->|Menor a 100 min| B
+    H --> I[Incrementar tiempo (+5 min)]
+    I -->|Menor a 100 min| B
     I -->|Fin del ciclo| J([Resumen final])
 ```
 
