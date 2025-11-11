@@ -63,7 +63,7 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 
 ## Diagrama de flujo simplificado
 
-```{mermaid}
+```mermaid
 flowchart TD
     A([Inicio del sistema]) --> B[Zona orbital detectada]
     B --> C[P1: Sensor lee temperatura]
