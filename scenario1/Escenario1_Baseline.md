@@ -68,15 +68,15 @@ flowchart TD
     A([Inicio del sistema]) --> B[Detectar zona orbital]
     B --> C[P1: Leer temperatura]
     C --> D{Temperatura medida}
-    D -->|T > 90 °C| E[Activar enfriamiento]
-    D -->|T < 60 °C| F[Desactivar enfriamiento]
+    D -->|Mayor a 90 C| E[Activar enfriamiento]
+    D -->|Menor a 60 C| F[Desactivar enfriamiento]
     D -->|Rango seguro| G[Mantener estado]
     E --> H[P3: Transmitir datos UART]
     F --> H
     G --> H
-    H --> I[Incrementar tiempo (+5 min)]
+    H --> I[Incrementar tiempo 5 min]
     I -->|Tiempo < 100 min| B
-    I -->|Tiempo >= 100 min| J([Fin del ciclo orbital])
+    I -->|Fin de la orbita| J([Fin del ciclo orbital])
 ```
 
 ---
