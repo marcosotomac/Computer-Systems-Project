@@ -1,7 +1,7 @@
 # Escenario 1 – Baseline  
 ### Proyecto Final – Sistemas Computacionales  
 **Profesor:** Luz A. Adanaqué  
-**Alumnos:** *Marco Soto, Gussephe Benjamin, Joseph Cabanillas *  
+**Alumnos:** *Marco Soto, Gussephe Benjamin, Joseph Cabanillas*  
 **Tema:** Implementación de procesos y scheduler en un entorno RISC-V (simulación satelital)
 
 ---
@@ -68,12 +68,12 @@ flowchart TD
     A[Inicio del sistema] --> B[Zona orbital detectada]
     B --> C[P1: Sensor lee temperatura]
     C --> D[P2: Verifica temperatura]
-    D -->|>90°C| E[Activa enfriamiento]
-    D -->|<60°C| F[Desactiva enfriamiento]
+    D -->|T > 90°C| E[Activa enfriamiento]
+    D -->|T < 60°C| F[Desactiva enfriamiento]
     D --> G[P3: Transmite datos UART]
     G --> H[Incrementa tiempo (+5 min)]
-    H -->|<100 min| B
-    H -->|>=100 min| I[Fin del ciclo orbital]
+    H -->|Tiempo < 100 min| B
+    H -->|Tiempo >= 100 min| I[Fin del ciclo orbital]
 ```
 
 ---
