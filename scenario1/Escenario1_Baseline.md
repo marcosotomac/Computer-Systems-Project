@@ -1,18 +1,12 @@
----
-title: "Escenario 1 – Baseline"
-author: "[tu nombre]"
-format: html
----
-
-# 🛰️ Escenario 1 – Baseline  
+# Escenario 1 – Baseline  
 ### Proyecto Final – Sistemas Computacionales  
 **Profesor:** Luz A. Adanaqué  
-**Alumno:** *[tu nombre]*  
+**Alumnos:** *Marco Soto, Gussephe Benjamin, Joseph Cabanillas*  
 **Tema:** Implementación de procesos y scheduler en un entorno RISC-V (simulación satelital)
 
 ---
 
-## 📋 Descripción general
+## Descripción general
 
 El **Escenario 1 (Baseline)** representa la **fase inicial de prueba del scheduler** dentro del sistema operativo que controla tres procesos relacionados con el sensado remoto de un satélite en órbita baja (LEO).  
 
@@ -20,13 +14,13 @@ En este escenario, los procesos **se ejecutan secuencialmente** y **sin priorida
 
 ---
 
-## ⚙️ Objetivo
+## Objetivo
 
 Simular un ciclo orbital de 100 minutos en el que se miden parámetros térmicos del satélite, se aplican técnicas de enfriamiento cuando sea necesario y se transmiten los datos obtenidos por medio de una interfaz UART.
 
 ---
 
-## 🧩 Procesos implementados
+## Procesos implementados
 
 | Proceso | Nombre | Descripción | Condición de ejecución |
 |----------|---------|-------------|------------------------|
@@ -36,7 +30,7 @@ Simular un ciclo orbital de 100 minutos en el que se miden parámetros térmicos
 
 ---
 
-## 🛰️ Contexto orbital
+## Contexto orbital
 
 El satélite describe una órbita baja (LEO) de **100 min**, dividida en:
 
@@ -47,7 +41,7 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 
 ---
 
-## 🧠 Lógica de ejecución
+## Lógica de ejecución
 
 1. **Inicio del ciclo orbital:**  
    El sistema inicializa los procesos y el tiempo simulado.  
@@ -67,7 +61,7 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 
 ---
 
-## 🧮 Diagrama de flujo simplificado
+## Diagrama de flujo simplificado
 
 ```{mermaid}
 flowchart TD
@@ -86,7 +80,7 @@ flowchart TD
 
 ---
 
-## 💻 Ejecución del sistema
+## Ejecución del sistema
 
 ```bash
 gcc escenario1.c -o escenario1
@@ -102,7 +96,7 @@ spike pk escenario1
 
 ---
 
-## 📈 Ejemplo de salida
+## Ejemplo de salida
 
 ```
 🌍 INICIO DE SIMULACIÓN - ESCENARIO 1 (BASELINE)
@@ -126,7 +120,7 @@ Duración de la órbita: 100 min (Luminosa: 42, Oscura: 58)
 
 ---
 
-## 🧠 Consideraciones técnicas
+## Consideraciones técnicas
 
 - Cada proceso simula su propio contexto (estado y variables compartidas).  
 - El scheduler no implementa cambio de contexto ni prioridades.  
@@ -135,7 +129,7 @@ Duración de la órbita: 100 min (Luminosa: 42, Oscura: 58)
 
 ---
 
-## 📚 Referencias bibliográficas
+## Referencias bibliográficas
 
 - Patterson, D. A., & Hennessy, J. L. (2020). *Computer Organization and Design, RISC-V Edition.* Morgan Kaufmann.  
 - Silberschatz, A., Galvin, P. B., & Gagne, G. (2015). *Operating System Concepts (9th ed.).* Wiley.  
