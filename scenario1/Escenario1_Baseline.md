@@ -1,7 +1,7 @@
 # Escenario 1 – Baseline  
 ### Proyecto Final – Sistemas Computacionales  
 **Profesor:** Luz A. Adanaqué  
-**Alumno:** *[tu nombre]*  
+**Alumnos:** *Marco Soto, Gussephe Benjamin, Joseph Cabanillas *  
 **Tema:** Implementación de procesos y scheduler en un entorno RISC-V (simulación satelital)
 
 ---
