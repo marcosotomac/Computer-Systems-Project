@@ -18,11 +18,11 @@
 #define COOL_OFF_TH  60
 #define ANOMALY_TH  100
 
-typedef enum { PID_P1 = 0, PID_P3 = 1, PID_P2 = 2 } pid_t;
-static const pid_t PRIORITY_ORDER[3] = { PID_P1, PID_P3, PID_P2 };
+typedef enum { PID_P1 = 0, PID_P3 = 1, PID_P2 = 2 } proc_id_t;
+static const proc_id_t PRIORITY_ORDER[3] = { PID_P1, PID_P3, PID_P2 };
 
 typedef struct {
-    pid_t pid;
+    proc_id_t pid;
     const char *name;
     int pc;
     int active;
@@ -39,14 +39,14 @@ static char uart_buf[UART_BUF_CAP];
 static int uart_len = 0;
 static int uart_tx_in_progress = 0;
 
-static pid_t current = PID_P1;
+static proc_id_t current = PID_P1;
 static int context_switches = 0;
 static int abrupt_switches = 0;
 
 static int in_bright_zone(void) { return minute_sim < BRIGHT_ZONE_MIN; }
 static int rand_range(int lo, int hi) { return lo + (rand() % (hi - lo + 1)); }
 
-static int are_consecutive(pid_t a, pid_t b) {
+static int are_consecutive(proc_id_t a, proc_id_t b) {
     for (int i = 0; i < 3; ++i) {
         if (PRIORITY_ORDER[i] == a) {
             if (i > 0 && PRIORITY_ORDER[i - 1] == b) return 1;
@@ -104,7 +104,7 @@ static void P3_step(pcb_t *p) {
 }
 
 /* Selección según prioridad o evento */
-static pid_t choose_next(pid_t last, int anomaly) {
+static proc_id_t choose_next(proc_id_t last, int anomaly) {
     if (anomaly) return PID_P2;
     int idx = 0;
     for (int i = 0; i < 3; ++i) if (PRIORITY_ORDER[i] == last) idx = i;
@@ -156,7 +156,7 @@ int main(void) {
         }
 
         int anomaly = (temperature >= ANOMALY_TH);
-        pid_t next = choose_next(current, anomaly);
+        proc_id_t next = choose_next(current, anomaly);
         context_switch(cur, procs[next], anomaly);
         current = next;
 
