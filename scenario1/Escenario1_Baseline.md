@@ -65,17 +65,18 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 
 ```mermaid
 flowchart TD
-    A([Inicio del sistema]) --> B[Zona orbital detectada]
-    B --> C[P1: Sensor lee temperatura]
-    C --> D[P2: Verifica temperatura]
-    D --> E{Temperatura}
-    E -->|> 90C| F[Activa enfriamiento]
-    E -->|< 60C| G[Desactiva enfriamiento]
-    F --> H[P3: Transmite datos UART]
+    A([Inicio del sistema]) --> B[Detectar zona orbital]
+    B --> C[P1: Leer temperatura]
+    C --> D{Temperatura medida}
+    D -->|T > 90 °C| E[Activar enfriamiento]
+    D -->|T < 60 °C| F[Desactivar enfriamiento]
+    D -->|Rango seguro| G[Mantener estado]
+    E --> H[P3: Transmitir datos UART]
+    F --> H
     G --> H
-    H --> I[Incrementa tiempo (+5 min)]
-    I -->|Menor a 100 min| B
-    I -->|Fin del ciclo| J([Fin del ciclo orbital])
+    H --> I[Incrementar tiempo (+5 min)]
+    I -->|Tiempo < 100 min| B
+    I -->|Tiempo >= 100 min| J([Fin del ciclo orbital])
 ```
 
 ---
