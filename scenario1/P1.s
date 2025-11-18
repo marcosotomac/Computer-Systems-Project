@@ -1,4 +1,4 @@
-    .section .text
+.section .text
     .globl P1
 
 # P1(int zone)  -> retorna temperatura en a0
@@ -14,7 +14,10 @@ P1:
     lw t2, 0(t1)
     li t3, 1103515245
     mul t2, t2, t3
-    addi t2, t2, 12345
+    
+    # Para sumar 12345, necesitamos usar li primero
+    li t4, 12345
+    add t2, t2, t4
     sw t2, 0(t1)
 
     # Seleccionar rango según zona

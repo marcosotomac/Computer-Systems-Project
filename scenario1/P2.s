@@ -1,4 +1,4 @@
-    .section .text
+.section .text
     .globl P2
 
 # P2(int temp) -> retorna 1 (ON) o 0 (OFF)

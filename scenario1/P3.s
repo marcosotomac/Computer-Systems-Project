@@ -1,40 +1,44 @@
-    .section .text
+.section .text
     .globl P3
 
 # P3(int temp, int cooling, int zone)
+# a0 = temp
+# a1 = cooling
+# a2 = zone
 
 P3:
-    # temp = a0
-    # cooling = a1
-    # zone = a2
-
-    # Llamamos a printf desde ensamblador
+    # Guardar registros en el stack
+    addi sp, sp, -16
+    sw ra, 12(sp)      # Guardar return address
+    sw a0, 8(sp)       # Guardar temp
+    sw a1, 4(sp)       # Guardar cooling
+    sw a2, 0(sp)       # Guardar zone
 
     # Imprimir encabezado
     la a0, msg_header
     call printf
 
     # Imprimir temperatura
+    lw a1, 8(sp)       # Recuperar temp en a1
     la a0, msg_temp
-    mv a1, a3       # a3 no está usado: mover temp
-    mv a1, t0
-    mv t0, a0
-    mv a0, msg_temp
-    mv a1, t0
     call printf
 
     # Imprimir cooling
-    mv t0, a1
+    lw a1, 4(sp)       # Recuperar cooling en a1
     la a0, msg_cool
-    mv a1, t0
     call printf
 
     # Imprimir zona
-    mv t0, a2
+    lw a1, 0(sp)       # Recuperar zone en a1
     la a0, msg_zone
-    mv a1, t0
     call printf
 
+    # Restaurar registros y retornar
+    lw ra, 12(sp)
+    lw a0, 8(sp)
+    lw a1, 4(sp)
+    lw a2, 0(sp)
+    addi sp, sp, 16
     ret
 
     .section .rodata
