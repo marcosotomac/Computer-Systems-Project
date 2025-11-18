@@ -26,7 +26,7 @@ Simular un ciclo orbital de 100 minutos en el que se miden parámetros térmicos
 
 | Proceso | Nombre                | Descripción                                                                                                       | Condición de ejecución |
 | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| **P1**  | Sensor de temperatura | Captura datos de temperatura (45 °C – 105 °C) diferenciando entre zona luminosa y oscura de la órbita.            | Cada 5 min             |
+| **P1**  | Sensor de temperatura | Lee una muestra predeterminada (45 °C – 105 °C) desde un dataset de prueba diferenciado por zona orbital.         | Cada 5 min             |
 | **P2**  | Enfriamiento          | Activa el sistema de enfriamiento si la temperatura supera 90 °C y lo desactiva al descender por debajo de 60 °C. | Condicional            |
 | **P3**  | Comunicación UART     | Muestra los datos generados por el sensor (P1) y el estado del enfriamiento (P2).                                 | Continuamente          |
 
@@ -48,7 +48,7 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 1. **Inicio del ciclo orbital:**  
    El sistema inicializa los procesos y el tiempo simulado.
 2. **Lectura del sensor (P1):**  
-   Se genera un valor de temperatura aleatorio según la zona (luminosa u oscura).
+   Se obtiene la siguiente muestra del dataset textual cargado (`data/dataset_case*.txt`). Cada archivo contiene 20 lecturas (5 min c/u) dentro del rango 45‑105 °C incluyendo valores anómalos que fuerzan la activación y posterior restauración del sistema de enfriamiento.
 3. **Verificación térmica (P2):**  
    El proceso de enfriamiento revisa la temperatura leída:
    - Si > 90 °C → activa el sistema y muestra alerta.
@@ -86,16 +86,18 @@ flowchart TD
 ## Ejecución del sistema
 
 ```bash
-gcc escenario1.c -o escenario1
-./escenario1
+# Desde la raíz del repo
+cd scenario1
+./compile.sh
+
+# Ejecutar con Spike + pk seleccionando un dataset
+spike --isa=rv64imac \
+  /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
+  programa data/dataset_case2.txt
 ```
 
-O, para entorno RISC-V:
-
-```bash
-riscv64-unknown-elf-gcc -o escenario1 escenario1.c
-spike pk escenario1
-```
+- `compile.sh` recompila `main.c` y `P1/P2/P3.s` con `riscv64-unknown-elf-*` (RV64IMAC) y muestra los comandos de ejecución con cada dataset (`data/dataset_case1..4.txt`).
+- `data/dataset_case*.txt` permiten repetir escenarios conocidos: por ejemplo, *case2* arranca con varias lecturas >100 °C para provocar una alerta de enfriamiento prolongada, mientras que *case3* presenta un descenso suave que mantiene el cooler apagado en la segunda mitad de la órbita.
 
 ---
 
