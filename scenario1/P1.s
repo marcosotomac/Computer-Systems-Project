@@ -1,42 +1,62 @@
 .section .text
     .globl P1
+    .globl P1_set_dataset
 
-# P1(int zone)  -> retorna temperatura en a0
-# zone: 1 = luminosa, 0 = oscura
+# P1(int zone) -> retorna la siguiente muestra configurada
 
 P1:
-    # Guardar zona en t0
-    mv t0, a0
+    la t0, dataset_ptr
+    ld t1, 0(t0)          # t1 = puntero al arreglo
+    beqz t1, default_temp
 
-    # Usaremos un LCG para pseudoaleatorio simple
-    # seed = seed * 1103515245 + 12345
-    la t1, seed
-    lw t2, 0(t1)
-    li t3, 1103515245
-    mul t2, t2, t3
-    
-    # Para sumar 12345, necesitamos usar li primero
-    li t4, 12345
-    add t2, t2, t4
-    sw t2, 0(t1)
+    la t2, dataset_len
+    lw t3, 0(t2)          # t3 = longitud
+    blez t3, default_temp
 
-    # Seleccionar rango según zona
-    beq t0, zero, zona_oscura
+    la t4, dataset_idx
+    lw t5, 0(t4)          # t5 = índice actual
+    bge t5, t3, use_last
 
-zona_luminosa:
-    # temperatura = 85 + (seed % 20)
-    li t4, 20
-    rem t5, t2, t4
-    addi a0, t5, 85
+    slli t6, t5, 2        # offset = indice * sizeof(int)
+    add t6, t1, t6
+    lw a0, 0(t6)
+
+    addi t5, t5, 1        # avanzar índice
+    sw t5, 0(t4)
     ret
 
-zona_oscura:
-    # temperatura = 45 + (seed % 30)
-    li t4, 30
-    rem t5, t2, t4
-    addi a0, t5, 45
+use_last:
+    addi t6, t3, -1
+    blt t6, zero, default_temp
+    slli t6, t6, 2
+    add t6, t1, t6
+    lw a0, 0(t6)
     ret
 
-    .section .data
-seed:
-    .word 1234567
+default_temp:
+    li a0, 70
+    ret
+
+# void P1_set_dataset(const int *data, int length)
+P1_set_dataset:
+    la t0, dataset_ptr
+    sd a0, 0(t0)
+
+    la t0, dataset_len
+    sw a1, 0(t0)
+
+    la t0, dataset_idx
+    sw zero, 0(t0)
+    ret
+
+    .section .bss
+    .align 3
+dataset_ptr:
+    .zero 8
+
+    .align 2
+dataset_len:
+    .zero 4
+
+dataset_idx:
+    .zero 4
