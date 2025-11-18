@@ -27,7 +27,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 | Proceso                    | Descripción                                               | Condición   |
 | -------------------------- | --------------------------------------------------------- | ----------- |
-| **P1 – Sensor**            | Lee temperatura (45–105 °C) según la zona orbital.        | Cada 5 min  |
+| **P1 – Sensor**            | Lee temperatura determinística (45–105 °C) desde el dataset cargado por zona orbital. | Cada 5 min  |
 | **P2 – Enfriamiento**      | Se activa si T>90 °C y se apaga si T<60 °C.               | Condicional |
 | **P3 – Comunicación UART** | Transmite la lectura de temperatura y estado del sistema. | Continuo    |
 
@@ -37,11 +37,12 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ## Lógica de funcionamiento
 
-1. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
-2. **Eventos anómalos:** Si la temperatura supera 100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
-3. **Cambio de contexto:** Se guarda el _program counter_ y se registra la transición.
-4. **Pérdidas de información:** Si el proceso interrumpido estaba con datos sin enviar o sin registrar (`dirty`), se contabiliza una pérdida simulada (bytes UART o muestras no consumidas).
-5. **Reporte:** El sistema imprime en consola los procesos activos, los cambios de contexto y un resumen final con métricas del scheduler.
+1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos.
+2. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
+3. **Eventos anómalos:** Si P1 registra una temperatura ≥100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
+4. **Cambio de contexto:** Se guarda el _program counter_ y se registra la transición.
+5. **Pérdidas de información:** Si el proceso interrumpido estaba con datos sin enviar o sin registrar (`dirty`), se contabiliza una pérdida simulada (bytes UART o muestras no consumidas).
+6. **Reporte:** El sistema imprime en consola los procesos activos, los cambios de contexto y un resumen final con métricas del scheduler.
 
 ---
 
@@ -67,16 +68,17 @@ flowchart TD
 ## Ejecución del programa
 
 ```bash
-gcc escenario2.c -o escenario2
-./escenario2
+cd scenario2
+./compile.sh
+
+# Ejecutar con Spike + pk y un dataset (ejemplo: case2)
+spike --isa=rv64imac \
+  /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
+  programa data/dataset_case2.txt
 ```
 
-Para entorno RISC-V:
-
-```bash
-riscv64-unknown-elf-gcc -o escenario2 escenario2.c
-spike pk escenario2
-```
+- `compile.sh` ensambla `P1.s`, `P2.s` y `P3.s` en RV64IMAC y enlaza el scheduler.
+- Los datasets `data/dataset_case{1..4}.txt` replican distintos perfiles térmicos: `case2` provoca múltiples anomalías, `case3` mantiene el enfriamiento apagado en la órbita nocturna, etc.
 
 ---
 
@@ -84,22 +86,31 @@ spike pk escenario2
 
 ```
 === ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
+Dataset cargado: data/dataset_case2.txt (20 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
-[P1] t=  0 min | Temp=102 C | Zona=Luminosa | pc=1
-🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
-[P2] ⚠️ ACTIVADO (T>90 C)
-[OS] UART=0B pend | Cooling=ON
+[P1] t=  0 min | Temp=98 C | Zona=Luminosa | pc=1
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=5 min | Zona=Luminosa
-[P2] Estado=ON | pc=2
-↔️  Cambio de contexto P2 -> P3
-[P3] TX 16B (pendiente= 0B) | pc=1
-[OS] UART=0B pend | Cooling=ON
+[P3] UART Transmission:
+ - Temp: 98 C
+ - Cooling: 0
+ - Zone: 1 (1=luz,0=oscuridad)
+[P3] TX 16B (pendiente= 6B) | pc=1
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=6B pend | Cooling=OFF
+
+⏱️  t=15 min | Zona=Luminosa
+[P1] t= 15 min | Temp=101 C | Zona=Luminosa | pc=2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
+[OS] UART=6B pend | Cooling=ON
+...
 
 ===== RESUMEN =====
-Context switches: 12 | Abruptos: 3
-Pérdidas (B): P1=8, P3=16, P2=2
+Context switches: 20 | Abruptos: 4
+Pérdidas (B): P1=16, P3=0, P2=0
 ```
 
 ---
@@ -107,9 +118,9 @@ Pérdidas (B): P1=8, P3=16, P2=2
 ## Observaciones técnicas
 
 - Las conmutaciones se registran con indicador visual (`↔️` normal, `🔁` abrupto).
-- Las pérdidas simuladas se basan en datos no transmitidos o muestras no guardadas.
-- El sistema sigue la misma estructura orbital del escenario anterior.
-- El código mantiene modularidad por procesos (`P1`, `P2`, `P3`) y un _scheduler_ central.
+- Los procesos (`P1`, `P2`, `P3`) están escritos en ensamblador RISC‑V y se comparten con el Escenario 1; el scheduler en C controla su ejecución y contexto.
+- Las pérdidas simuladas se basan en datos no transmitidos o muestras no guardadas durante un cambio abrupto.
+- El sistema mantiene la órbita de 100 min (42 min de luz) y permite repetir pruebas cambiando únicamente el dataset.
 
 ---
 
