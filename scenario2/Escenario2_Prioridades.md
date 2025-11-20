@@ -37,7 +37,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ## Lógica de funcionamiento
 
-1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos.
+1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `../data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos.
 2. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
 3. **Eventos anómalos:** Si P1 registra una temperatura ≥100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
 4. **Cambio de contexto:** Se guarda el _program counter_ y se registra la transición.
@@ -74,11 +74,11 @@ cd scenario2
 # Ejecutar con Spike + pk y un dataset (ejemplo: case2)
 spike --isa=rv64imac \
   /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
-  programa data/dataset_case2.txt
+  programa ../data/dataset_case2.txt
 ```
 
 - `compile.sh` ensambla `P1.s`, `P2.s` y `P3.s` en RV64IMAC y enlaza el scheduler.
-- Los datasets `data/dataset_case{1..4}.txt` replican distintos perfiles térmicos: `case2` provoca múltiples anomalías, `case3` mantiene el enfriamiento apagado en la órbita nocturna, etc.
+- Los datasets `../data/dataset_case{1..4}.txt` replican distintos perfiles térmicos: `case2` provoca múltiples anomalías, `case3` mantiene el enfriamiento apagado en la órbita nocturna, etc.
 
 ---
 
@@ -86,7 +86,7 @@ spike --isa=rv64imac \
 
 ```
 === ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
-Dataset cargado: data/dataset_case2.txt (20 muestras)
+Dataset cargado: ../data/dataset_case2.txt (20 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=98 C | Zona=Luminosa | pc=1

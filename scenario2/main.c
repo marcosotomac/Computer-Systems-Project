@@ -14,7 +14,7 @@
 
 #define DATASET_REQUIRED_SAMPLES (ORBIT_TIME_MIN / STEP_MIN)
 #define MAX_DATASET_SAMPLES      64
-#define DEFAULT_DATASET_PATH "data/dataset_case1.txt"
+#define DEFAULT_DATASET_PATH "../data/dataset_case1.txt"
 
 extern int P1(int zone);
 extern int P2(int temp);

@@ -48,7 +48,7 @@ Durante la zona luminosa, la temperatura del satélite tiende a aumentar; en la 
 1. **Inicio del ciclo orbital:**  
    El sistema inicializa los procesos y el tiempo simulado.
 2. **Lectura del sensor (P1):**  
-   Se obtiene la siguiente muestra del dataset textual cargado (`data/dataset_case*.txt`). Cada archivo contiene 20 lecturas (5 min c/u) dentro del rango 45‑105 °C incluyendo valores anómalos que fuerzan la activación y posterior restauración del sistema de enfriamiento.
+   Se obtiene la siguiente muestra del dataset textual cargado (`../data/dataset_case*.txt`). Cada archivo contiene 20 lecturas (5 min c/u) dentro del rango 45‑105 °C incluyendo valores anómalos que fuerzan la activación y posterior restauración del sistema de enfriamiento.
 3. **Verificación térmica (P2):**  
    El proceso de enfriamiento revisa la temperatura leída:
    - Si > 90 °C → activa el sistema y muestra alerta.
@@ -93,11 +93,11 @@ cd scenario1
 # Ejecutar con Spike + pk seleccionando un dataset
 spike --isa=rv64imac \
   /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
-  programa data/dataset_case2.txt
+  programa ../data/dataset_case2.txt
 ```
 
-- `compile.sh` recompila `main.c` y `P1/P2/P3.s` con `riscv64-unknown-elf-*` (RV64IMAC) y muestra los comandos de ejecución con cada dataset (`data/dataset_case1..4.txt`).
-- `data/dataset_case*.txt` permiten repetir escenarios conocidos: por ejemplo, *case2* arranca con varias lecturas >100 °C para provocar una alerta de enfriamiento prolongada, mientras que *case3* presenta un descenso suave que mantiene el cooler apagado en la segunda mitad de la órbita.
+- `compile.sh` recompila `main.c` y `P1/P2/P3.s` con `riscv64-unknown-elf-*` (RV64IMAC) y muestra los comandos de ejecución con cada dataset ubicado en `../data`.
+- Los archivos `../data/dataset_case*.txt` permiten repetir escenarios conocidos: por ejemplo, *case2* arranca con varias lecturas >100 °C para provocar una alerta de enfriamiento prolongada, mientras que *case3* presenta un descenso suave que mantiene el cooler apagado en la segunda mitad de la órbita.
 
 ---
 

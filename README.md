@@ -17,13 +17,13 @@ Verifica que `riscv64-unknown-elf-gcc`, `riscv64-unknown-elf-as`, `spike` y `pk`
 scenario1/
   main.c
   P1.s P2.s P3.s
-  data/dataset_case{1..4}.txt
   compile.sh
 scenario2/
   main.c
   P1.s P2.s P3.s
-  data/dataset_case{1..4}.txt
   compile.sh
+data/
+  dataset_case{1..4}.txt
 ```
 
 En ambos escenarios los procesos están en ensamblador RISC-V (RV64IMAC) y se enlazan con un `main.c` específico.
@@ -38,7 +38,7 @@ Simula una órbita LEO de 100 minutos dividida en 42 minutos de zona luminosa y 
 2. **P2 – Enfriamiento:** activa el cooling cuando la temperatura supera 90 °C y lo desactiva al bajar de 60 °C.
 3. **P3 – Comunicación UART:** imprime por consola la temperatura y el estado del cooling.
 
-Los datasets (`scenario1/data/dataset_case*.txt`) contienen 20 muestras (5 min cada una) e incluyen valores anómalos para forzar la activación/desactivación del enfriamiento.
+Los datasets (`data/dataset_case*.txt`) contienen 20 muestras (5 min cada una) e incluyen valores anómalos para forzar la activación/desactivación del enfriamiento.
 
 ### Compilación y ejecución
 
@@ -49,7 +49,7 @@ cd scenario1
 # Ejecutar con Spike + pk
 spike --isa=rv64imac \
   /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
-  programa data/dataset_case2.txt
+  programa ../data/dataset_case2.txt
 ```
 
 El script `compile.sh` ensambla `P1/P2/P3` y compila `main.c` con `riscv64-unknown-elf-gcc`. Al ejecutar `programa` con Spike se puede elegir cualquiera de los cuatro datasets de prueba.
@@ -64,7 +64,7 @@ El sistema imprime un bloque por cada intervalo de 5 minutos, mostrando la zona 
 
 Extiende los procesos anteriores a un scheduler con prioridad fija `P1 > P3 > P2` y cambios de contexto controlados. Características relevantes:
 
-- **Datasets determinísticos:** se cargan los mismos archivos `data/dataset_case*.txt` para que P1 produzca lecturas reproducibles.
+- **Datasets determinísticos:** se cargan los mismos archivos `data/dataset_case*.txt` (ubicados en la raíz del repositorio) para que P1 produzca lecturas reproducibles.
 - **Detección de anomalías:** cuando P1 reporta temperaturas ≥100 °C se fuerza un salto inmediato a P2 (cambio abrupto).
 - **Context switching:** se guardan contadores de programa, se contabilizan pérdidas si el proceso interrumpido tenía datos sin transmitir (`dirty`) y se distinguen conmutaciones normales (`↔️`) de abruptas (`🔁`).
 - **Reporte final:** incluye número de cambios de contexto totales/abruptos y bytes perdidos por proceso.
@@ -77,7 +77,7 @@ cd scenario2
 
 spike --isa=rv64imac \
   /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
-  programa data/dataset_case2.txt
+  programa ../data/dataset_case2.txt
 ```
 
 `compile.sh` ensambla los tres procesos y enlaza el scheduler (`main.c`). Cambiando el dataset se pueden reproducir distintos comportamientos: por ejemplo, `dataset_case2` introduce múltiples anomalías consecutivas, mientras que `dataset_case3` forza una rampa descendente en la zona oscura.
