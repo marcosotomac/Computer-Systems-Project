@@ -1,4 +1,4 @@
-# Escenario 2 – Prioridad impuesta con conmutación y detección de pérdidas
+# Escenario 3 – Priorización invertida y reacción inmediata
 
 ### Proyecto Final – Sistemas Computacionales
 
@@ -9,17 +9,17 @@
 
 ## Descripción general
 
-El Escenario 2 representa la simulación de un _scheduler_ con **prioridades impuestas** en un sistema operativo para un satélite.  
-Los procesos ya no se ejecutan de manera secuencial como en el escenario anterior: ahora existe una **jerarquía de prioridad fija (P1 > P3 > P2)**, y el sistema debe ser capaz de **interrumpir procesos**, registrar los cambios y **detectar pérdidas de información** cuando la conmutación ocurre entre procesos no consecutivos.
+El Escenario 3 continúa la simulación del _scheduler_ satelital agregando una **prioridad invertida**: ahora el sistema favorece al proceso de enfriamiento (`P2`) antes de consultar el sensor o transmitir datos.  
+Esta variante busca evaluar qué tan rápido se pueden aplicar técnicas de enfriamiento cuando hay lecturas críticas y cómo impacta ese cambio en las pérdidas por conmutaciones abruptas.
 
 ---
 
 ## Objetivos principales
 
-- Implementar un _scheduler preemptivo_ con prioridad fija.
-- Detectar y reportar pérdidas de información cuando hay cambios abruptos entre procesos no consecutivos.
-- Mantener el mismo ciclo orbital de 100 minutos (42 min zona luminosa y 58 min zona oscura).
-- Simular el guardado de _Program Counter (PC)_ en cada cambio de proceso.
+- Reordenar el _scheduler preemptivo_ para imponer la prioridad fija `P2 > P1 > P3`.
+- Reaccionar al instante cuando `P1` detecta valores ≥100 °C saltando a `P2`, registrando el cambio abrupto.
+- Mantener el ciclo orbital de 100 minutos (42 min luz / 58 min oscuridad) y el registro del PC en cada cambio.
+- Cuantificar el impacto del nuevo orden en cambios de contexto, pérdidas de datos y métricas pedidas en el informe.
 
 ---
 
@@ -28,21 +28,21 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 | Proceso                    | Descripción                                               | Condición   |
 | -------------------------- | --------------------------------------------------------- | ----------- |
 | **P1 – Sensor**            | Lee temperatura determinística (45–105 °C) desde el dataset cargado por zona orbital. | Cada 5 min  |
-| **P2 – Enfriamiento**      | Se activa si T>90 °C y se apaga si T<60 °C.               | Condicional |
+| **P2 – Enfriamiento**      | Tiene prioridad máxima; se activa con T>90 °C y se apaga si T<60 °C. | Condicional |
 | **P3 – Comunicación UART** | Transmite la lectura de temperatura y estado del sistema. | Continuo    |
 
-**Orden de prioridad:** `P1 > P3 > P2`
+**Orden de prioridad:** `P2 > P1 > P3`
 
 ---
 
 ## Lógica de funcionamiento
 
-1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `../data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos.
-2. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
-3. **Eventos anómalos:** Si P1 registra una temperatura ≥100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
-4. **Cambio de contexto:** Se guarda el _program counter_ y se registra la transición.
-5. **Pérdidas de información:** Si el proceso interrumpido estaba con datos sin enviar o sin registrar (`dirty`), se contabiliza una pérdida simulada (bytes UART o muestras no consumidas).
-6. **Reporte:** El sistema imprime en consola los procesos activos, los cambios de contexto y un resumen final con métricas del scheduler.
+1. **Carga de dataset:** Igual que en los demás escenarios, se cargan 20 muestras determinísticas desde `../data/dataset_case*.txt`.
+2. **Prioridades invertidas:** El OS ejecuta los procesos siguiendo `P2 → P1 → P3`. `P2` puede ejecutarse incluso con la última temperatura conocida mientras espera una nueva lectura.
+3. **Eventos anómalos:** Si `P1` registra una temperatura ≥100 °C, se produce un salto inmediato (no consecutivo) hacia `P2` para aplicar cooling.
+4. **Cambio de contexto:** Se guarda el _program counter_ de cada proceso y se notifica si el salto fue normal (`↔️`) o abrupto (`🔁`).
+5. **Pérdidas de información:** Los procesos `dirty` generan pérdidas simuladas (bytes UART o muestras no procesadas) cuando el cambio es abrupto.
+6. **Reporte:** El scheduler imprime los procesos ejecutados, el estado del buffer UART / cooling y un resumen con métricas.
 
 ---
 
@@ -53,8 +53,8 @@ flowchart TD
     A([Inicio del sistema]) --> B[Leer temperatura P1]
     B --> C{Temperatura mayor o igual a 100C}
     C -->|Si| D[Salto a P2 cambio abrupto]
-    C -->|No| E[Continuar segun prioridad]
-    E --> F[Ejecutar P3 UART]
+    C -->|No| E[Continuar con prioridad invertida (P2>P1>P3)]
+    E --> F[Ejecutar UART o siguiente proceso]
     D --> G[Registrar perdida de datos]
     F --> H[Actualizar PC y cambiar proceso]
     G --> H
@@ -68,7 +68,7 @@ flowchart TD
 ## Ejecución del programa
 
 ```bash
-cd scenario2
+cd scenario3
 ./compile.sh
 
 # Ejecutar con Spike + pk y un dataset (ejemplo: case2)
@@ -85,19 +85,20 @@ spike --isa=rv64imac \
 ## Ejemplo de salida
 
 ```
-=== ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
+=== ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
 Dataset cargado: ../data/dataset_case2.txt (20 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
-[P1] t=  0 min | Temp=98 C | Zona=Luminosa | pc=1
-↔️  Cambio de contexto P1 -> P3
+[P2] Estado=OFF | pc=1
+↔️  Cambio de contexto P2 -> P1
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=5 min | Zona=Luminosa
-[P3] UART Transmission:
- - Temp: 98 C
- - Cooling: 0
- - Zone: 1 (1=luz,0=oscuridad)
+[P1] t=  5 min | Temp=98 C | Zona=Luminosa | pc=1
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF
+
+⏱️  t=10 min | Zona=Luminosa
 [P3] TX 16B (pendiente= 6B) | pc=1
 ↔️  Cambio de contexto P3 -> P2
 [OS] UART=6B pend | Cooling=OFF
@@ -110,7 +111,7 @@ Dataset cargado: ../data/dataset_case2.txt (20 muestras)
 
 ===== RESUMEN =====
 Context switches: 20 | Abruptos: 4
-Pérdidas (B): P1=16, P3=0, P2=0
+Pérdidas (B): P1=16, P3=8, P2=0
 ```
 
 ---
@@ -126,20 +127,20 @@ Pérdidas (B): P1=16, P3=0, P2=0
 
 ## Métricas reportadas
 
-Siguiendo las recomendaciones del enunciado (`IS2021_ProyectoP1.md`) y del README general, el escenario 2 ahora imprime automáticamente un bloque de métricas al finalizar la simulación:
+Siguiendo las recomendaciones del enunciado (`IS2021_ProyectoP1.md`) y del README general, el escenario 3 también imprime automáticamente un bloque de métricas al finalizar la simulación:
 
 | Métrica                          | Descripción                                                                                                  |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `Texe total`                     | Tiempo de pared de toda la órbita (100 min simulados).                                                       |
 | `Syscalls simuladas`             | Cuenta las llamadas al sistema usadas para cargar datasets y aplicar los retardos del scheduler.             |
 | `Interrupciones por anomalías`   | Número de saltos forzados por lecturas mayores o iguales a 100 °C.                                           |
-| `Proceso | Tiempo total / Prom.` | Tiempo acumulado y promedio de cada proceso `P1`, `P3` y `P2`, más el _speedup_ relativo contra el más lento. |
+| `Proceso | Tiempo total / Prom.` | Tiempo acumulado y promedio de cada proceso (`P2`, `P1`, `P3`), más el _speedup_ relativo contra el más lento. |
 | `CPU Occupation`                 | Porcentaje de uso del CPU simulado, comparando tiempo activo de procesos vs. `Texe`.                        |
 | `Mem. Occupation`                | Huella aproximada en KB de buffers, métricas y PCB durante la corrida.                                      |
 
 En particular, la métrica de **syscalls simuladas** contabiliza cada operación de E/S que el scheduler realiza para cargar los datasets (`fopen`, lecturas sucesivas y `fclose`) y los retardos de `sleep` utilizados cuando se ejecuta fuera de Spike/PK. De esta manera se puede relacionar el costo del planificador con las interacciones con el sistema operativo anfitrión.
 
-Estas métricas permiten contrastar este escenario con el baseline (Esc. 1), preparar tablas comparativas y justificar los beneficios/costos de imponer prioridades y manejar cambios abruptos.
+Estas métricas permiten contrastar este escenario con el baseline (Esc. 1) y con el de prioridades originales (Esc. 2), preparando tablas comparativas que muestren el impacto del nuevo orden.
 
 ---
 

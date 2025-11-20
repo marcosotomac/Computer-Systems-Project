@@ -86,6 +86,25 @@ spike --isa=rv64imac \
 
 La salida muestra, para cada intervalo, qué proceso se ejecutó, el estado del buffer UART y los cambios de contexto. El resumen final reseña los cambios totales y las pérdidas acumuladas por proceso.
 
+## Escenario 3 – Priorización invertida
+
+### Descripción
+
+Deriva del escenario anterior, pero invierte la prioridad fija del scheduler para favorecer al proceso de enfriamiento (`P2 > P1 > P3`). Así se puede evaluar qué tan rápido se aplican las técnicas de cooling ante valores anómalos (≥100 °C) y cómo impacta eso en los bytes perdidos cuando el salto se produce entre procesos no consecutivos.
+
+### Compilación y ejecución
+
+```bash
+cd scenario3
+./compile.sh
+
+spike --isa=rv64imac \
+  /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
+  programa ../data/dataset_case2.txt
+```
+
+`compile.sh` ensambla los mismos procesos en ensamblador y enlaza un scheduler que contabiliza los context switches, las pérdidas y un bloque adicional de métricas (Texe, syscalls simuladas, interrupciones por anomalías, promedios por proceso, ocupación de CPU/memoria) para comparar con los escenarios 1 y 2.
+
 ## Datasets disponibles
 
 | Dataset               | Descripción resumida                                                                      |
@@ -95,7 +114,7 @@ La salida muestra, para cada intervalo, qué proceso se ejecutó, el estado del 
 | `dataset_case3.txt`   | Descenso progresivo en zona oscura, manteniendo el cooling apagado en la segunda mitad.   |
 | `dataset_case4.txt`   | Combinación de picos en luz y oscilaciones en oscuridad para evaluar reacciones frecuentes. |
 
-Cada dataset contiene 20 enteros (uno por intervalo de 5 min) y puede reutilizarse en ambos escenarios.
+Cada dataset contiene **100 muestras** (equivalentes a cinco órbitas de 5 minutos por lectura); los escenarios consumen al menos las primeras 20, pero se pueden alargar las simulaciones o repetirlas desplazando el índice para analizar comportamientos más complejos.
 
 ## Próximos pasos
 

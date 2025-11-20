@@ -23,7 +23,7 @@ extern void P3(int temp, int cooling, int zone);
 extern void P1_set_dataset(const int *data, int length);
 
 typedef enum { PID_P1 = 0, PID_P3 = 1, PID_P2 = 2 } proc_id_t;
-static const proc_id_t PRIORITY_ORDER[3] = { PID_P1, PID_P3, PID_P2 };
+static const proc_id_t PRIORITY_ORDER[3] = { PID_P2, PID_P1, PID_P3 };
 
 typedef struct {
     proc_id_t pid;
@@ -50,7 +50,7 @@ static long proc_calls[3] = {0};
 static long syscall_count = 0;
 static long interrupt_count = 0;
 
-static proc_id_t current = PID_P1;
+static proc_id_t current = PID_P2;
 static int context_switches = 0;
 static int abrupt_switches = 0;
 
@@ -94,7 +94,7 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
         wall_ms > 0.0 ? ((active_us / 1000.0) / wall_ms) * 100.0 : 0.0;
     double mem_kb = compute_mem_kb();
 
-    printf("\n===== METRICAS ESCENARIO 2 =====\n");
+    printf("\n===== METRICAS ESCENARIO 3 =====\n");
     printf("Texe total: %.3f ms\n", wall_ms);
     printf("Syscalls simuladas: %ld\n", syscall_count);
     printf("Interrupciones por anomalías (T>=%d C): %ld\n",
@@ -244,7 +244,7 @@ int main(int argc, char **argv) {
     pcb_t *procs[3] = { &p1, &p3, &p2 };
     current = PID_P1;
 
-    printf("=== ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===\n");
+    printf("=== ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===\n");
     load_dataset_or_exit(dataset_path);
 
     clock_t run_start = clock();
