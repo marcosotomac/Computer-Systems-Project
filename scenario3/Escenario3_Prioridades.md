@@ -53,7 +53,7 @@ flowchart TD
     A([Inicio del sistema]) --> B[Leer temperatura P1]
     B --> C{Temperatura mayor o igual a 100C}
     C -->|Si| D[Salto a P2 cambio abrupto]
-    C -->|No| E[Continuar con prioridad invertida (P2>P1>P3)]
+    C -->|No| E["Continuar con prioridad invertida (P2>P1>P3)"]
     E --> F[Ejecutar UART o siguiente proceso]
     D --> G[Registrar perdida de datos]
     F --> H[Actualizar PC y cambiar proceso]
