@@ -50,17 +50,24 @@ Esta variante busca evaluar qué tan rápido se pueden aplicar técnicas de enfr
 
 ```mermaid
 flowchart TD
-    A([Inicio del sistema]) --> B[Leer temperatura P1]
-    B --> C{Temperatura mayor o igual a 100C}
-    C -->|Si| D[Salto a P2 cambio abrupto]
-    C -->|No| E["Continuar con prioridad invertida (P2>P1>P3)"]
-    E --> F[Ejecutar UART o siguiente proceso]
-    D --> G[Registrar perdida de datos]
-    F --> H[Actualizar PC y cambiar proceso]
-    G --> H
-    H --> I[Incrementar tiempo mas 5 min]
-    I -->|Menor a 100 min| B
-    I -->|Fin del ciclo| J([Resumen final])
+    A([Inicio del sistema]) --> B[t=0 min]
+    B --> C{t menor a 100 min?}
+    C -->|No| Z([Resumen final y métricas])
+    C -->|Si| D["Determinar proceso actual (round-robin P2→P1→P3)"]
+    D --> E[Ejecutar proceso actual]
+    E --> F{Proceso fue P1?}
+    F -->|No| K[Siguiente según round-robin]
+    F -->|Si| G{Temperatura mayor o igual a 100C?}
+    G -->|No| K
+    G -->|Si| H["🔁 Salto ABRUPTO a P2 (anomalía)"]
+    H --> I[Registrar pérdida de datos]
+    I --> J[Incrementar contador de interrupciones]
+    J --> L[Cambio de contexto y actualizar PC]
+    K --> M["↔️ Cambio de contexto normal"]
+    M --> L
+    L --> N[Mostrar estado del sistema]
+    N --> O[Incrementar tiempo en 5 min]
+    O --> C
 ```
 
 ---
