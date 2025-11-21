@@ -18,9 +18,12 @@ extern int P1(int zone);
 extern int P2(int temp);
 extern void P3(int temp, int cooling, int zone);
 extern void P1_set_dataset(const int *data, int length);
+extern int P1_get_pc(void);
+extern int P2_get_pc(void);
+extern int P3_get_pc(void);
 
 typedef enum { PID_P1 = 0, PID_P3 = 1, PID_P2 = 2 } proc_id_t;
-static const proc_id_t PRIORITY_ORDER[3] = { PID_P2, PID_P1, PID_P3 };
+static const proc_id_t PRIORITY_ORDER[3] = { PID_P1, PID_P3, PID_P2 };
 
 typedef struct {
     proc_id_t pid;
@@ -47,7 +50,7 @@ static long proc_calls[3] = {0};
 static long interrupt_count = 0;
 static double scheduler_time_us = 0;
 
-static proc_id_t current = PID_P2;
+static proc_id_t current = PID_P1;
 static int context_switches = 0;
 static int abrupt_switches = 0;
 
@@ -91,7 +94,7 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
         wall_ms > 0.0 ? ((active_us / 1000.0) / wall_ms) * 100.0 : 0.0;
     double mem_kb = compute_mem_kb();
 
-    printf("\n===== METRICAS ESCENARIO 3 =====\n");
+    printf("\n===== METRICAS ESCENARIO 4 =====\n");
     printf("Texe total: %.3f ms\n", wall_ms);
     printf("Interrupciones por anomalías (T>=%d C): %ld\n",
            ANOMALY_TH, interrupt_count);
@@ -149,9 +152,18 @@ static int are_consecutive(proc_id_t a, proc_id_t b) {
     return 0;
 }
 
+/* Simulación de syscall: guarda PC del proceso y cambia de contexto */
+static void do_syscall(pcb_t *from, pcb_t *to) {
+    printf("⚙️  Syscall: guardando PC de %s=%d y saltando a %s\n",
+           from->name, from->pc, to->name);
+    context_switches++;
+    if (!are_consecutive(from->pid, to->pid)) abrupt_switches++;
+    current = to->pid;
+}
+
 /* P1: lectura de temperatura */
 static void P1_step(pcb_t *p) {
-    p->pc++;
+    p->pc = P1_get_pc();
     temperature = P1(in_bright_zone() ? 1 : 0);
     p->dirty = 1;
     printf("[P1] t=%3d min | Temp=%d C | Zona=%s | pc=%d\n",
@@ -160,7 +172,7 @@ static void P1_step(pcb_t *p) {
 
 /* P2: control de enfriamiento */
 static void P2_step(pcb_t *p) {
-    p->pc++;
+    p->pc = P2_get_pc();
     int prev = cooling_on;
     cooling_on = P2(temperature);
     if (!prev && cooling_on) {
@@ -176,7 +188,7 @@ static void P2_step(pcb_t *p) {
 
 /* P3: transmisión UART */
 static void P3_step(pcb_t *p) {
-    p->pc++;
+    p->pc = P3_get_pc();
     if (uart_len == 0) {
         int n = snprintf(uart_buf, UART_BUF_CAP,
                          "UART: T=%dC, COOL=%s\n", temperature, cooling_on ? "ON" : "OFF");
@@ -236,7 +248,7 @@ int main(int argc, char **argv) {
     pcb_t *procs[3] = { &p1, &p3, &p2 };
     current = PID_P1;
 
-    printf("=== ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===\n");
+    printf("=== ESCENARIO 4: Syscalls y reanudación de PC ===\n");
     load_dataset_or_exit(dataset_path);
 
     clock_t run_start = clock();
@@ -256,12 +268,23 @@ int main(int argc, char **argv) {
 
         int anomaly = (cur->pid == PID_P1 && temperature >= ANOMALY_TH);
         if (anomaly) interrupt_count++;
-        proc_id_t next = choose_next(current, anomaly);
-        context_switch(cur, procs[next], anomaly);
-        current = next;
 
-        printf("[OS] UART=%dB pend | Cooling=%s\n",
-               uart_len, cooling_on ? "ON" : "OFF");
+        /* Simulación de bandera de comunicación y syscall */
+        int comm_flag = (cur->pid == PID_P3 && uart_tx_in_progress);
+        proc_id_t next = choose_next(current, anomaly);
+        if (comm_flag) {
+            proc_id_t target = next;
+            do_syscall(cur, procs[target]);
+            cur = procs[target];
+        } else {
+            context_switch(cur, procs[next], anomaly);
+            cur = procs[next];
+        }
+        current = cur->pid;
+
+        printf("[OS] UART=%dB pend | Cooling=%s | PC(P1,P2,P3)=(%d,%d,%d)\n",
+               uart_len, cooling_on ? "ON" : "OFF",
+               P1_get_pc(), P2_get_pc(), P3_get_pc());
         scheduler_delay();
     }
     clock_t run_end = clock();

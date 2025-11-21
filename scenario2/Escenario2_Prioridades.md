@@ -37,7 +37,7 @@ Los procesos ya no se ejecutan de manera secuencial como en el escenario anterio
 
 ## Lógica de funcionamiento
 
-1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `../data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos.
+1. **Carga de dataset:** Antes de iniciar la órbita se carga uno de los cuatro archivos `../data/dataset_case*.txt`, cada uno con 20 muestras (5 min c/u) que incluyen valores anómalos; los datasets se mantienen como archivos de texto (no embebidos).
 2. **Prioridades impuestas:** El OS ejecuta los procesos según el orden definido.
 3. **Eventos anómalos:** Si P1 registra una temperatura ≥100 °C, se fuerza un salto inmediato a P2 (no consecutivo).
 4. **Cambio de contexto:** Se guarda el _program counter_ y se registra la transición.
@@ -131,13 +131,12 @@ Siguiendo las recomendaciones del enunciado (`IS2021_ProyectoP1.md`) y del READM
 | Métrica                          | Descripción                                                                                                  |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `Texe total`                     | Tiempo de pared de toda la órbita (100 min simulados).                                                       |
-| `Syscalls simuladas`             | Cuenta las llamadas al sistema usadas para cargar datasets y aplicar los retardos del scheduler.             |
 | `Interrupciones por anomalías`   | Número de saltos forzados por lecturas mayores o iguales a 100 °C.                                           |
 | `Proceso | Tiempo total / Prom.` | Tiempo acumulado y promedio de cada proceso `P1`, `P3` y `P2`, más el _speedup_ relativo contra el más lento. |
 | `CPU Occupation`                 | Porcentaje de uso del CPU simulado, comparando tiempo activo de procesos vs. `Texe`.                        |
 | `Mem. Occupation`                | Huella aproximada en KB de buffers, métricas y PCB durante la corrida.                                      |
 
-En particular, la métrica de **syscalls simuladas** contabiliza cada operación de E/S que el scheduler realiza para cargar los datasets (`fopen`, lecturas sucesivas y `fclose`) y los retardos de `sleep` utilizados cuando se ejecuta fuera de Spike/PK. De esta manera se puede relacionar el costo del planificador con las interacciones con el sistema operativo anfitrión.
+No se emulan syscalls adicionales en el scheduler; la interacción con el entorno se limita a leer los datasets `.txt` y a los mensajes impresos en consola.
 
 Estas métricas permiten contrastar este escenario con el baseline (Esc. 1), preparar tablas comparativas y justificar los beneficios/costos de imponer prioridades y manejar cambios abruptos.
 

@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
-#include <unistd.h>
 
 #define ORBIT_TIME_MIN   100
 #define BRIGHT_ZONE_MIN   42
 #define STEP_MIN           5
-#define SLEEP_SECONDS      1
 
 #define COOL_ON_TH   90
 #define COOL_OFF_TH  60
@@ -47,8 +44,8 @@ static int dataset_buffer[MAX_DATASET_SAMPLES];
 static int dataset_len = 0;
 static double proc_total_us[3] = {0};
 static long proc_calls[3] = {0};
-static long syscall_count = 0;
 static long interrupt_count = 0;
+static double scheduler_time_us = 0;
 
 static proc_id_t current = PID_P1;
 static int context_switches = 0;
@@ -77,7 +74,7 @@ static double compute_mem_kb(void) {
 static void print_metrics(clock_t start_clock, clock_t end_clock) {
     double avg_us[3] = {0};
     double max_avg = 0.0;
-    double active_us = 0.0;
+    double active_us = scheduler_time_us;
     const char *names[3] = { "P1", "P3", "P2" };
 
     for (int i = 0; i < 3; ++i) {
@@ -96,9 +93,9 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
 
     printf("\n===== METRICAS ESCENARIO 2 =====\n");
     printf("Texe total: %.3f ms\n", wall_ms);
-    printf("Syscalls simuladas: %ld\n", syscall_count);
     printf("Interrupciones por anomalías (T>=%d C): %ld\n",
            ANOMALY_TH, interrupt_count);
+    printf("Tiempo scheduler (busy loop): %.3f ms\n", scheduler_time_us / 1000.0);
     printf("Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)\n");
     for (int i = 0; i < 3; ++i) {
         double speedup = (avg_us[i] > 0.0 && max_avg > 0.0) ? (max_avg / avg_us[i]) : 0.0;
@@ -110,14 +107,12 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
 }
 
 static void scheduler_delay(void) {
-#if defined(__riscv)
     volatile int dummy = 0;
+    clock_t start = clock();
     for (int i = 0; i < 500000; ++i) dummy += i;
+    clock_t end = clock();
+    scheduler_time_us += clock_diff_us(start, end);
     (void)dummy;
-#else
-    syscall_count++;
-    sleep(SLEEP_SECONDS);
-#endif
 }
 
 static void load_dataset_or_exit(const char *path) {
@@ -126,16 +121,13 @@ static void load_dataset_or_exit(const char *path) {
         fprintf(stderr, "Error: no se pudo abrir dataset '%s'\n", path);
         exit(1);
     }
-    syscall_count++;  // fopen
 
     dataset_len = 0;
     while (dataset_len < MAX_DATASET_SAMPLES &&
            fscanf(fp, "%d", &dataset_buffer[dataset_len]) == 1) {
         dataset_len++;
-        syscall_count++;  // fscanf read
     }
     fclose(fp);
-    syscall_count++;  // fclose
 
     if (dataset_len < DATASET_REQUIRED_SAMPLES) {
         fprintf(stderr, "Error: dataset '%s' tiene %d muestras, se requieren %d.\n",
@@ -278,8 +270,7 @@ int main(int argc, char **argv) {
     printf("Context switches: %d | Abruptos: %d\n", context_switches, abrupt_switches);
     printf("Pérdidas (B): P1=%d, P3=%d, P2=%d\n",
            p1.lost_bytes, p3.lost_bytes, p2.lost_bytes);
-    printf("Syscalls simuladas: %ld | Interrupciones detectadas: %ld\n",
-           syscall_count, interrupt_count);
+    printf("Interrupciones detectadas: %ld\n", interrupt_count);
     print_metrics(run_start, run_end);
     return 0;
 }

@@ -10,38 +10,30 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
  - Zone: 1 (1=luz,0=oscuridad)
 
 [05 min] Zona LUMINOSA
-[P1] Temp leída: 93 C
+[P1] Temp leída: 104 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 93 C
+ - Temp: 104 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
 [10 min] Zona LUMINOSA
-[P1] Temp leída: 95 C
+[P1] Temp leída: 106 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 95 C
+ - Temp: 106 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
 [15 min] Zona LUMINOSA
-[P1] Temp leída: 99 C
+[P1] Temp leída: 108 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 99 C
+ - Temp: 108 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
 [20 min] Zona LUMINOSA
-[P1] Temp leída: 101 C
-[P2] Cooling: ON
-[P3] UART Transmission:
- - Temp: 101 C
- - Cooling: 1
- - Zone: 1 (1=luz,0=oscuridad)
-
-[25 min] Zona LUMINOSA
 [P1] Temp leída: 105 C
 [P2] Cooling: ON
 [P3] UART Transmission:
@@ -49,27 +41,35 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
-[30 min] Zona LUMINOSA
-[P1] Temp leída: 99 C
+[25 min] Zona LUMINOSA
+[P1] Temp leída: 102 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 99 C
+ - Temp: 102 C
+ - Cooling: 1
+ - Zone: 1 (1=luz,0=oscuridad)
+
+[30 min] Zona LUMINOSA
+[P1] Temp leída: 101 C
+[P2] Cooling: ON
+[P3] UART Transmission:
+ - Temp: 101 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
 [35 min] Zona LUMINOSA
-[P1] Temp leída: 102 C
+[P1] Temp leída: 107 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 102 C
+ - Temp: 107 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
 [40 min] Zona LUMINOSA
-[P1] Temp leída: 102 C
+[P1] Temp leída: 110 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 102 C
+ - Temp: 110 C
  - Cooling: 1
  - Zone: 1 (1=luz,0=oscuridad)
 
@@ -82,10 +82,10 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
  - Zone: 0 (1=luz,0=oscuridad)
 
 [50 min] Zona OSCURA
-[P1] Temp leída: 105 C
+[P1] Temp leída: 103 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 105 C
+ - Temp: 103 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
@@ -98,22 +98,46 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
  - Zone: 0 (1=luz,0=oscuridad)
 
 [60 min] Zona OSCURA
-[P1] Temp leída: 98 C
+[P1] Temp leída: 99 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 98 C
+ - Temp: 99 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
 [65 min] Zona OSCURA
-[P1] Temp leída: 96 C
+[P1] Temp leída: 97 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 96 C
+ - Temp: 97 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
 [70 min] Zona OSCURA
+[P1] Temp leída: 105 C
+[P2] Cooling: ON
+[P3] UART Transmission:
+ - Temp: 105 C
+ - Cooling: 1
+ - Zone: 0 (1=luz,0=oscuridad)
+
+[75 min] Zona OSCURA
+[P1] Temp leída: 109 C
+[P2] Cooling: ON
+[P3] UART Transmission:
+ - Temp: 109 C
+ - Cooling: 1
+ - Zone: 0 (1=luz,0=oscuridad)
+
+[80 min] Zona OSCURA
+[P1] Temp leída: 102 C
+[P2] Cooling: ON
+[P3] UART Transmission:
+ - Temp: 102 C
+ - Cooling: 1
+ - Zone: 0 (1=luz,0=oscuridad)
+
+[85 min] Zona OSCURA
 [P1] Temp leída: 95 C
 [P2] Cooling: ON
 [P3] UART Transmission:
@@ -121,43 +145,19 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
-[75 min] Zona OSCURA
-[P1] Temp leída: 88 C
-[P2] Cooling: ON
-[P3] UART Transmission:
- - Temp: 88 C
- - Cooling: 1
- - Zone: 0 (1=luz,0=oscuridad)
-
-[80 min] Zona OSCURA
-[P1] Temp leída: 92 C
-[P2] Cooling: ON
-[P3] UART Transmission:
- - Temp: 92 C
- - Cooling: 1
- - Zone: 0 (1=luz,0=oscuridad)
-
-[85 min] Zona OSCURA
-[P1] Temp leída: 89 C
-[P2] Cooling: ON
-[P3] UART Transmission:
- - Temp: 89 C
- - Cooling: 1
- - Zone: 0 (1=luz,0=oscuridad)
-
 [90 min] Zona OSCURA
-[P1] Temp leída: 98 C
+[P1] Temp leída: 101 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 98 C
+ - Temp: 101 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
 [95 min] Zona OSCURA
-[P1] Temp leída: 87 C
+[P1] Temp leída: 104 C
 [P2] Cooling: ON
 [P3] UART Transmission:
- - Temp: 87 C
+ - Temp: 104 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 
@@ -165,10 +165,11 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ===== METRICAS ESCENARIO 1 =====
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (relativo)
-  P1    |            6.000 |         0.300 |  81.17 x
+  P1    |           17.000 |         0.850 |  28.65 x
   P2    |            8.000 |         0.400 |  60.88 x
   P3    |          487.000 |        24.350 |   1.00 x
 
-Total runtime: 1.045 ms
-CPU Occupation: 47.94 % (sobre tiempo medido en procesos)
+Tiempo scheduler (busy loop): 140.017 ms
+Total runtime: 141.071 ms
+CPU Occupation: 99.62 % (sobre tiempo medido en procesos + scheduler)
 Mem. Occupation: 0.30 KB (dataset + métricas)

@@ -2,13 +2,13 @@
 Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
-[P1] t=  0 min | Temp=76 C | Zona=Luminosa | pc=1
+[P1] t=  0 min | Temp=95 C | Zona=Luminosa | pc=1
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=5 min | Zona=Luminosa
 [P3] UART Transmission:
- - Temp: 76 C
+ - Temp: 95 C
  - Cooling: 0
  - Zone: 1 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 6B) | pc=1
@@ -16,116 +16,116 @@ Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 [OS] UART=6B pend | Cooling=OFF
 
 ⏱️  t=10 min | Zona=Luminosa
-[P2] Estado=OFF | pc=1
-↔️  Cambio de contexto P2 -> P1
-[OS] UART=6B pend | Cooling=OFF
-
-⏱️  t=15 min | Zona=Luminosa
-[P1] t= 15 min | Temp=90 C | Zona=Luminosa | pc=2
-↔️  Cambio de contexto P1 -> P3
-[OS] UART=6B pend | Cooling=OFF
-
-⏱️  t=20 min | Zona=Luminosa
-[P3] TX  6B (pendiente= 0B) | pc=2
-↔️  Cambio de contexto P3 -> P2
-[OS] UART=0B pend | Cooling=OFF
-
-⏱️  t=25 min | Zona=Luminosa
-[P2] Estado=OFF | pc=2
-↔️  Cambio de contexto P2 -> P1
-[OS] UART=0B pend | Cooling=OFF
-
-⏱️  t=30 min | Zona=Luminosa
-[P1] t= 30 min | Temp=92 C | Zona=Luminosa | pc=3
-↔️  Cambio de contexto P1 -> P3
-[OS] UART=0B pend | Cooling=OFF
-
-⏱️  t=35 min | Zona=Luminosa
-[P3] UART Transmission:
- - Temp: 92 C
- - Cooling: 0
- - Zone: 1 (1=luz,0=oscuridad)
-[P3] TX 16B (pendiente= 6B) | pc=3
-↔️  Cambio de contexto P3 -> P2
-[OS] UART=6B pend | Cooling=OFF
-
-⏱️  t=40 min | Zona=Luminosa
 [P2] ⚠️ ACTIVADO (T>90 C)
 ↔️  Cambio de contexto P2 -> P1
 [OS] UART=6B pend | Cooling=ON
 
-⏱️  t=45 min | Zona=Oscura
-[P1] t= 45 min | Temp=91 C | Zona=Oscura | pc=4
+⏱️  t=15 min | Zona=Luminosa
+[P1] t= 15 min | Temp=101 C | Zona=Luminosa | pc=2
+↔️  Cambio de contexto P1 -> P2
+[OS] UART=6B pend | Cooling=ON
+
+⏱️  t=20 min | Zona=Luminosa
+[P2] Estado=ON | pc=2
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=6B pend | Cooling=ON
+
+⏱️  t=25 min | Zona=Luminosa
+[P1] t= 25 min | Temp=65 C | Zona=Luminosa | pc=3
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=6B pend | Cooling=ON
 
-⏱️  t=50 min | Zona=Oscura
-[P3] TX  6B (pendiente= 0B) | pc=4
+⏱️  t=30 min | Zona=Luminosa
+[P3] TX  6B (pendiente= 0B) | pc=2
 ↔️  Cambio de contexto P3 -> P2
 [OS] UART=0B pend | Cooling=ON
 
-⏱️  t=55 min | Zona=Oscura
+⏱️  t=35 min | Zona=Luminosa
+[P2] Estado=ON | pc=3
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=ON
+
+⏱️  t=40 min | Zona=Luminosa
+[P1] t= 40 min | Temp=104 C | Zona=Luminosa | pc=4
+↔️  Cambio de contexto P1 -> P2
+[OS] UART=0B pend | Cooling=ON
+
+⏱️  t=45 min | Zona=Oscura
 [P2] Estado=ON | pc=4
 ↔️  Cambio de contexto P2 -> P1
 [OS] UART=0B pend | Cooling=ON
 
-⏱️  t=60 min | Zona=Oscura
-[P1] t= 60 min | Temp=100 C | Zona=Oscura | pc=5
-↔️  Cambio de contexto P1 -> P2
+⏱️  t=50 min | Zona=Oscura
+[P1] t= 50 min | Temp=58 C | Zona=Oscura | pc=5
+↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=ON
+
+⏱️  t=55 min | Zona=Oscura
+[P3] UART Transmission:
+ - Temp: 58 C
+ - Cooling: 1
+ - Zone: 0 (1=luz,0=oscuridad)
+[P3] TX 16B (pendiente= 5B) | pc=3
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=5B pend | Cooling=ON
+
+⏱️  t=60 min | Zona=Oscura
+[P2] ✅ DESACTIVADO (T<60 C)
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=5B pend | Cooling=OFF
 
 ⏱️  t=65 min | Zona=Oscura
-[P2] Estado=ON | pc=5
-↔️  Cambio de contexto P2 -> P1
-[OS] UART=0B pend | Cooling=ON
+[P1] t= 65 min | Temp=99 C | Zona=Oscura | pc=6
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=5B pend | Cooling=OFF
 
 ⏱️  t=70 min | Zona=Oscura
-[P1] t= 70 min | Temp=104 C | Zona=Oscura | pc=6
-↔️  Cambio de contexto P1 -> P2
-[OS] UART=0B pend | Cooling=ON
+[P3] TX  5B (pendiente= 0B) | pc=4
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=75 min | Zona=Oscura
-[P2] Estado=ON | pc=6
+[P2] ⚠️ ACTIVADO (T>90 C)
 ↔️  Cambio de contexto P2 -> P1
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=80 min | Zona=Oscura
-[P1] t= 80 min | Temp=95 C | Zona=Oscura | pc=7
-↔️  Cambio de contexto P1 -> P3
+[P1] t= 80 min | Temp=105 C | Zona=Oscura | pc=7
+↔️  Cambio de contexto P1 -> P2
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=85 min | Zona=Oscura
+[P2] Estado=ON | pc=7
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=ON
+
+⏱️  t=90 min | Zona=Oscura
+[P1] t= 90 min | Temp=62 C | Zona=Oscura | pc=8
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=ON
+
+⏱️  t=95 min | Zona=Oscura
 [P3] UART Transmission:
- - Temp: 95 C
+ - Temp: 62 C
  - Cooling: 1
  - Zone: 0 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 5B) | pc=5
 ↔️  Cambio de contexto P3 -> P2
 [OS] UART=5B pend | Cooling=ON
 
-⏱️  t=90 min | Zona=Oscura
-[P2] Estado=ON | pc=7
-↔️  Cambio de contexto P2 -> P1
-[OS] UART=5B pend | Cooling=ON
-
-⏱️  t=95 min | Zona=Oscura
-[P1] t= 95 min | Temp=105 C | Zona=Oscura | pc=8
-↔️  Cambio de contexto P1 -> P2
-[OS] UART=5B pend | Cooling=ON
-
 ===== RESUMEN =====
 Context switches: 20 | Abruptos: 0
 Pérdidas (B): P1=0, P3=0, P2=0
-Syscalls simuladas: 66 | Interrupciones detectadas: 3
+Interrupciones detectadas: 3
 
 ===== METRICAS ESCENARIO 3 =====
-Texe total: 50.754 ms
-Syscalls simuladas: 66
+Texe total: 50.776 ms
 Interrupciones por anomalías (T>=100 C): 3
+Tiempo scheduler (busy loop): 50.007 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           64.000 |         8.000 |   3.10 x
-  P3    |          124.000 |        24.800 |   1.00 x
-  P2    |           47.000 |         6.714 |   3.69 x
+  P1    |           65.000 |         8.125 |   3.03 x
+  P3    |          123.000 |        24.600 |   1.00 x
+  P2    |           47.000 |         6.714 |   3.66 x
 
-CPU Occupation: 0.46 %
+CPU Occupation: 98.95 %
 Mem. Occupation: 0.45 KB (dataset + buffers + PCB)

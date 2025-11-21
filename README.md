@@ -103,16 +103,16 @@ spike --isa=rv64imac \
   programa ../data/dataset_case2.txt
 ```
 
-`compile.sh` ensambla los mismos procesos en ensamblador y enlaza un scheduler que contabiliza los context switches, las pérdidas y un bloque adicional de métricas (Texe, syscalls simuladas, interrupciones por anomalías, promedios por proceso, ocupación de CPU/memoria) para comparar con los escenarios 1 y 2.
+`compile.sh` ensambla los mismos procesos en ensamblador y enlaza un scheduler que contabiliza los context switches, las pérdidas y un bloque adicional de métricas (Texe, interrupciones por anomalías, promedios por proceso, ocupación de CPU/memoria) para comparar con los escenarios 1 y 2, sin syscalls emuladas y cargando siempre datasets `.txt`.
 
 ## Datasets disponibles
 
-| Dataset               | Descripción resumida                                                                      |
-|-----------------------|-------------------------------------------------------------------------------------------|
-| `dataset_case1.txt`   | Perfil mixto; activa cooling al final de la fase luminosa y lo libera al inicio de la oscura. |
-| `dataset_case2.txt`   | Varias muestras ≥100 °C para evaluar cambios abruptos reiterados y cooling sostenido.      |
-| `dataset_case3.txt`   | Descenso progresivo en zona oscura, manteniendo el cooling apagado en la segunda mitad.   |
-| `dataset_case4.txt`   | Combinación de picos en luz y oscilaciones en oscuridad para evaluar reacciones frecuentes. |
+| Dataset               | Descripción resumida                                                                                              |
+|-----------------------|-------------------------------------------------------------------------------------------------------------------|
+| `dataset_case1.txt`   | Picos moderados (2 muestras ≥100 °C) con varios cruces de umbrales: genera pocas interrupciones pero múltiples ON/OFF del cooling. |
+| `dataset_case2.txt`   | Tramo cargado de anomalías (≈17 de las primeras 20 muestras ≥100 °C): provoca interrupciones frecuentes y cooling sostenido. |
+| `dataset_case3.txt`   | Perfil seguro en descenso (<90 °C siempre); no hay interrupciones ni activación de cooling.                       |
+| `dataset_case4.txt`   | Oscilaciones agresivas (≥100 °C alternando con <60 °C): activa/desactiva el cooling muchas veces y produce varias interrupciones. |
 
 Cada dataset contiene **100 muestras** (equivalentes a cinco órbitas de 5 minutos por lectura); los escenarios consumen al menos las primeras 20, pero se pueden alargar las simulaciones o repetirlas desplazando el índice para analizar comportamientos más complejos.
 

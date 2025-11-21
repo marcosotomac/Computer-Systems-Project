@@ -22,9 +22,19 @@ static struct {
     double total_us[PROC_COUNT];
     long calls[PROC_COUNT];
 } metrics = {0};
+static double scheduler_time_us = 0;
 
 static double clock_diff_us(clock_t start, clock_t end) {
     return ((double)(end - start) * 1000000.0) / (double)CLOCKS_PER_SEC;
+}
+
+static void scheduler_delay(void) {
+    volatile int dummy = 0;
+    clock_t start = clock();
+    for (int i = 0; i < 500000; ++i) dummy += i;
+    clock_t end = clock();
+    scheduler_time_us += clock_diff_us(start, end);
+    (void)dummy;
 }
 
 static void record_metric(enum proc_id id, double elapsed_ms) {
@@ -62,7 +72,7 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
     double avg_us[PROC_COUNT] = {0};
     double max_avg = 0.0;
     const char *names[PROC_COUNT] = { "P1", "P2", "P3" };
-    double active_us = 0.0;
+    double active_us = scheduler_time_us;
 
     for (int i = 0; i < PROC_COUNT; ++i) {
         if (metrics.calls[i] > 0) {
@@ -85,8 +95,9 @@ static void print_metrics(clock_t start_clock, clock_t end_clock) {
                names[i], metrics.total_us[i], avg_us[i], speedup);
     }
 
-    printf("\nTotal runtime: %.3f ms\n", wall_ms);
-    printf("CPU Occupation: %.2f %% (sobre tiempo medido en procesos)\n", cpu_occupation);
+    printf("\nTiempo scheduler (busy loop): %.3f ms\n", scheduler_time_us / 1000.0);
+    printf("Total runtime: %.3f ms\n", wall_ms);
+    printf("CPU Occupation: %.2f %% (sobre tiempo medido en procesos + scheduler)\n", cpu_occupation);
     printf("Mem. Occupation: %.2f KB (dataset + métricas)\n", mem_kb);
 }
 
@@ -133,6 +144,7 @@ int main(int argc, char **argv) {
         t1 = clock();
         record_metric(PROC_P3, clock_diff_us(t0, t1));
 
+        scheduler_delay();
         tiempo += STEP_MINUTES;
     }
 

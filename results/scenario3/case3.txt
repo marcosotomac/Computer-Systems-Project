@@ -2,13 +2,13 @@
 Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
-[P1] t=  0 min | Temp=76 C | Zona=Luminosa | pc=1
+[P1] t=  0 min | Temp=78 C | Zona=Luminosa | pc=1
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=5 min | Zona=Luminosa
 [P3] UART Transmission:
- - Temp: 76 C
+ - Temp: 78 C
  - Cooling: 0
  - Zone: 1 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 6B) | pc=1
@@ -21,7 +21,7 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=6B pend | Cooling=OFF
 
 ⏱️  t=15 min | Zona=Luminosa
-[P1] t= 15 min | Temp=78 C | Zona=Luminosa | pc=2
+[P1] t= 15 min | Temp=79 C | Zona=Luminosa | pc=2
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=6B pend | Cooling=OFF
 
@@ -36,13 +36,13 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=30 min | Zona=Luminosa
-[P1] t= 30 min | Temp=79 C | Zona=Luminosa | pc=3
+[P1] t= 30 min | Temp=77 C | Zona=Luminosa | pc=3
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=35 min | Zona=Luminosa
 [P3] UART Transmission:
- - Temp: 79 C
+ - Temp: 77 C
  - Cooling: 0
  - Zone: 1 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 6B) | pc=3
@@ -55,7 +55,7 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=6B pend | Cooling=OFF
 
 ⏱️  t=45 min | Zona=Oscura
-[P1] t= 45 min | Temp=78 C | Zona=Oscura | pc=4
+[P1] t= 45 min | Temp=76 C | Zona=Oscura | pc=4
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=6B pend | Cooling=OFF
 
@@ -70,13 +70,13 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=60 min | Zona=Oscura
-[P1] t= 60 min | Temp=78 C | Zona=Oscura | pc=5
+[P1] t= 60 min | Temp=75 C | Zona=Oscura | pc=5
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=65 min | Zona=Oscura
 [P3] UART Transmission:
- - Temp: 78 C
+ - Temp: 75 C
  - Cooling: 0
  - Zone: 0 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 6B) | pc=5
@@ -89,7 +89,7 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=6B pend | Cooling=OFF
 
 ⏱️  t=75 min | Zona=Oscura
-[P1] t= 75 min | Temp=76 C | Zona=Oscura | pc=6
+[P1] t= 75 min | Temp=74 C | Zona=Oscura | pc=6
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=6B pend | Cooling=OFF
 
@@ -104,13 +104,13 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=90 min | Zona=Oscura
-[P1] t= 90 min | Temp=74 C | Zona=Oscura | pc=7
+[P1] t= 90 min | Temp=73 C | Zona=Oscura | pc=7
 ↔️  Cambio de contexto P1 -> P3
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=95 min | Zona=Oscura
 [P3] UART Transmission:
- - Temp: 74 C
+ - Temp: 73 C
  - Cooling: 0
  - Zone: 0 (1=luz,0=oscuridad)
 [P3] TX 16B (pendiente= 6B) | pc=7
@@ -120,16 +120,16 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 ===== RESUMEN =====
 Context switches: 20 | Abruptos: 0
 Pérdidas (B): P1=0, P3=0, P2=0
-Syscalls simuladas: 66 | Interrupciones detectadas: 0
+Interrupciones detectadas: 0
 
 ===== METRICAS ESCENARIO 3 =====
-Texe total: 50.779 ms
-Syscalls simuladas: 66
+Texe total: 50.802 ms
 Interrupciones por anomalías (T>=100 C): 0
+Tiempo scheduler (busy loop): 50.009 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           56.000 |         8.000 |   2.93 x
-  P3    |          164.000 |        23.429 |   1.00 x
-  P2    |           41.000 |         6.833 |   3.43 x
+  P1    |           57.000 |         8.143 |   2.86 x
+  P3    |          163.000 |        23.286 |   1.00 x
+  P2    |           41.000 |         6.833 |   3.41 x
 
-CPU Occupation: 0.51 %
+CPU Occupation: 98.95 %
 Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
