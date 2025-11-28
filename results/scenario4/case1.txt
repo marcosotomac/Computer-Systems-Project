@@ -1,5 +1,5 @@
 === ESCENARIO 4: Syscalls y reanudación de PC ===
-Dataset cargado: ../data/dataset_case1.txt (64 muestras)
+Dataset cargado: ../data/dataset_case1.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=85 C | Zona=Luminosa | pc=0
@@ -111,9 +111,9 @@ Texe total: 50.740 ms
 Interrupciones por anomalías (T>=100 C): 1
 Tiempo scheduler (busy loop): 50.008 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           57.000 |         8.143 |   1.41 x
+  P1    |           56.000 |         8.000 |   1.44 x
   P3    |           69.000 |        11.500 |   1.00 x
-  P2    |           48.000 |         6.857 |   1.68 x
+  P2    |           47.000 |         6.714 |   1.71 x
 
 CPU Occupation: 98.90 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

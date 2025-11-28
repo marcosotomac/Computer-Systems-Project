@@ -1,0 +1,119 @@
+=== ESCENARIO 4: Syscalls y reanudación de PC ===
+Dataset cargado: ../data/dataset_case3.txt (200 muestras)
+
+⏱️  t=0 min | Zona=Luminosa
+[P1] t=  0 min | Temp=78 C | Zona=Luminosa | pc=0
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(1,0,0)
+
+⏱️  t=5 min | Zona=Luminosa
+[P3] UART Transmission:\n - Temp: 78 C\n - Cooling: 0\n - Zone: 1 (1=luz,0=oscuridad)\n[P3] TX 16B (pendiente= 6B) | pc=0
+⚙️  Syscall: guardando PC de P3=0 y saltando a P2
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(1,0,1)
+
+⏱️  t=10 min | Zona=Luminosa
+[P2] Estado=OFF | pc=0
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(1,1,1)
+
+⏱️  t=15 min | Zona=Luminosa
+[P1] t= 15 min | Temp=79 C | Zona=Luminosa | pc=1
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(2,1,1)
+
+⏱️  t=20 min | Zona=Luminosa
+[P3] TX  6B (pendiente= 0B) | pc=1
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(2,1,1)
+
+⏱️  t=25 min | Zona=Luminosa
+[P2] Estado=OFF | pc=1
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(2,2,1)
+
+⏱️  t=30 min | Zona=Luminosa
+[P1] t= 30 min | Temp=77 C | Zona=Luminosa | pc=2
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(3,2,1)
+
+⏱️  t=35 min | Zona=Luminosa
+[P3] UART Transmission:\n - Temp: 77 C\n - Cooling: 0\n - Zone: 1 (1=luz,0=oscuridad)\n[P3] TX 16B (pendiente= 6B) | pc=1
+⚙️  Syscall: guardando PC de P3=1 y saltando a P2
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(3,2,2)
+
+⏱️  t=40 min | Zona=Luminosa
+[P2] Estado=OFF | pc=2
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(3,3,2)
+
+⏱️  t=45 min | Zona=Oscura
+[P1] t= 45 min | Temp=76 C | Zona=Oscura | pc=3
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(4,3,2)
+
+⏱️  t=50 min | Zona=Oscura
+[P3] TX  6B (pendiente= 0B) | pc=2
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(4,3,2)
+
+⏱️  t=55 min | Zona=Oscura
+[P2] Estado=OFF | pc=3
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(4,4,2)
+
+⏱️  t=60 min | Zona=Oscura
+[P1] t= 60 min | Temp=75 C | Zona=Oscura | pc=4
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(5,4,2)
+
+⏱️  t=65 min | Zona=Oscura
+[P3] UART Transmission:\n - Temp: 75 C\n - Cooling: 0\n - Zone: 0 (1=luz,0=oscuridad)\n[P3] TX 16B (pendiente= 6B) | pc=2
+⚙️  Syscall: guardando PC de P3=2 y saltando a P2
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(5,4,3)
+
+⏱️  t=70 min | Zona=Oscura
+[P2] Estado=OFF | pc=4
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(5,5,3)
+
+⏱️  t=75 min | Zona=Oscura
+[P1] t= 75 min | Temp=74 C | Zona=Oscura | pc=5
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(6,5,3)
+
+⏱️  t=80 min | Zona=Oscura
+[P3] TX  6B (pendiente= 0B) | pc=3
+↔️  Cambio de contexto P3 -> P2
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(6,5,3)
+
+⏱️  t=85 min | Zona=Oscura
+[P2] Estado=OFF | pc=5
+↔️  Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(6,6,3)
+
+⏱️  t=90 min | Zona=Oscura
+[P1] t= 90 min | Temp=73 C | Zona=Oscura | pc=6
+↔️  Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF | PC(P1,P2,P3)=(7,6,3)
+
+⏱️  t=95 min | Zona=Oscura
+[P3] UART Transmission:\n - Temp: 73 C\n - Cooling: 0\n - Zone: 0 (1=luz,0=oscuridad)\n[P3] TX 16B (pendiente= 6B) | pc=3
+⚙️  Syscall: guardando PC de P3=3 y saltando a P2
+[OS] UART=6B pend | Cooling=OFF | PC(P1,P2,P3)=(7,6,4)
+
+===== RESUMEN =====
+Context switches: 20 | Abruptos: 0
+Pérdidas (B): P1=0, P3=0, P2=0
+Interrupciones detectadas: 0
+
+===== METRICAS ESCENARIO 4 =====
+Texe total: 50.746 ms
+Interrupciones por anomalías (T>=100 C): 0
+Tiempo scheduler (busy loop): 50.009 ms
+Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
+  P1    |           57.000 |         8.143 |   1.42 x
+  P3    |           81.000 |        11.571 |   1.00 x
+  P2    |           41.000 |         6.833 |   1.69 x
+
+CPU Occupation: 98.90 %
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

@@ -38,7 +38,7 @@ Simula una órbita LEO de 100 minutos dividida en 42 minutos de zona luminosa y 
 2. **P2 – Enfriamiento:** activa el cooling cuando la temperatura supera 90 °C y lo desactiva al bajar de 60 °C.
 3. **P3 – Comunicación UART:** imprime por consola la temperatura y el estado del cooling.
 
-Los datasets (`data/dataset_case*.txt`) contienen 20 muestras (5 min cada una) e incluyen valores anómalos para forzar la activación/desactivación del enfriamiento.
+Los datasets (`data/dataset_case*.txt`) contienen 200 muestras (5 min cada una); el scheduler actual consume al menos 20 (100 min simulados) e incluye valores anómalos para forzar la activación/desactivación del enfriamiento.
 
 ### Compilación y ejecución
 
@@ -114,7 +114,7 @@ spike --isa=rv64imac \
 | `dataset_case3.txt`   | Perfil seguro en descenso (<90 °C siempre); no hay interrupciones ni activación de cooling.                       |
 | `dataset_case4.txt`   | Oscilaciones agresivas (≥100 °C alternando con <60 °C): activa/desactiva el cooling muchas veces y produce varias interrupciones. |
 
-Cada dataset contiene **100 muestras** (equivalentes a cinco órbitas de 5 minutos por lectura); los escenarios consumen al menos las primeras 20, pero se pueden alargar las simulaciones o repetirlas desplazando el índice para analizar comportamientos más complejos.
+Cada dataset contiene **200 muestras** (equivalentes a diez órbitas de 5 minutos por lectura); los escenarios consumen al menos las primeras 20, pero se pueden alargar las simulaciones o repetirlas desplazando el índice para analizar comportamientos más complejos.
 
 ## Próximos pasos
 

@@ -1,5 +1,5 @@
 === ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
-Dataset cargado: ../data/dataset_case1.txt (64 muestras)
+Dataset cargado: ../data/dataset_case1.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=85 C | Zona=Luminosa | pc=1
@@ -90,7 +90,7 @@ Dataset cargado: ../data/dataset_case1.txt (64 muestras)
 
 ⏱️  t=75 min | Zona=Oscura
 [P1] t= 75 min | Temp=101 C | Zona=Oscura | pc=6
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=5B pend | Cooling=ON
 
 ⏱️  t=80 min | Zona=Oscura
@@ -114,18 +114,18 @@ Dataset cargado: ../data/dataset_case1.txt (64 muestras)
 [OS] UART=0B pend | Cooling=OFF
 
 ===== RESUMEN =====
-Context switches: 20 | Abruptos: 0
-Pérdidas (B): P1=0, P3=0, P2=0
+Context switches: 20 | Abruptos: 1
+Pérdidas (B): P1=4, P3=0, P2=0
 Interrupciones detectadas: 1
 
 ===== METRICAS ESCENARIO 3 =====
 Texe total: 50.776 ms
 Interrupciones por anomalías (T>=100 C): 1
-Tiempo scheduler (busy loop): 50.012 ms
+Tiempo scheduler (busy loop): 50.010 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           56.000 |         8.000 |   2.73 x
-  P3    |          131.000 |        21.833 |   1.00 x
-  P2    |           49.000 |         7.000 |   3.12 x
+  P1    |           57.000 |         8.143 |   2.66 x
+  P3    |          130.000 |        21.667 |   1.00 x
+  P2    |           47.000 |         6.714 |   3.23 x
 
-CPU Occupation: 98.96 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+CPU Occupation: 98.95 %
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

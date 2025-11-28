@@ -1,5 +1,5 @@
 === ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
-Dataset cargado: ../data/dataset_case1.txt (64 muestras)
+Dataset cargado: ../data/dataset_case1.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=85 C | Zona=Luminosa | pc=1
@@ -125,7 +125,7 @@ Tiempo scheduler (busy loop): 50.011 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
   P1    |           56.000 |         8.000 |   2.71 x
   P3    |          130.000 |        21.667 |   1.00 x
-  P2    |           49.000 |         7.000 |   3.10 x
+  P2    |           48.000 |         6.857 |   3.16 x
 
-CPU Occupation: 98.96 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+CPU Occupation: 98.95 %
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

@@ -11,7 +11,7 @@
 #define ANOMALY_TH  100
 
 #define DATASET_REQUIRED_SAMPLES (ORBIT_TIME_MIN / STEP_MIN)
-#define MAX_DATASET_SAMPLES      64
+#define MAX_DATASET_SAMPLES      256
 #define DEFAULT_DATASET_PATH "../data/dataset_case1.txt"
 
 extern int P1(int zone);

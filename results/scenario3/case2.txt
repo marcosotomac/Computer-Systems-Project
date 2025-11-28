@@ -1,9 +1,9 @@
 === ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
-Dataset cargado: ../data/dataset_case2.txt (64 muestras)
+Dataset cargado: ../data/dataset_case2.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=100 C | Zona=Luminosa | pc=1
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=OFF
 
 ⏱️  t=5 min | Zona=Luminosa
@@ -13,7 +13,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=10 min | Zona=Luminosa
 [P1] t= 10 min | Temp=104 C | Zona=Luminosa | pc=2
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=15 min | Zona=Luminosa
@@ -23,7 +23,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=20 min | Zona=Luminosa
 [P1] t= 20 min | Temp=106 C | Zona=Luminosa | pc=3
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=25 min | Zona=Luminosa
@@ -33,7 +33,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=30 min | Zona=Luminosa
 [P1] t= 30 min | Temp=108 C | Zona=Luminosa | pc=4
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=35 min | Zona=Luminosa
@@ -43,7 +43,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=40 min | Zona=Luminosa
 [P1] t= 40 min | Temp=105 C | Zona=Luminosa | pc=5
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=45 min | Zona=Oscura
@@ -53,7 +53,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=50 min | Zona=Oscura
 [P1] t= 50 min | Temp=102 C | Zona=Oscura | pc=6
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=55 min | Zona=Oscura
@@ -63,7 +63,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=60 min | Zona=Oscura
 [P1] t= 60 min | Temp=101 C | Zona=Oscura | pc=7
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=65 min | Zona=Oscura
@@ -73,7 +73,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=70 min | Zona=Oscura
 [P1] t= 70 min | Temp=107 C | Zona=Oscura | pc=8
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=75 min | Zona=Oscura
@@ -83,7 +83,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=80 min | Zona=Oscura
 [P1] t= 80 min | Temp=110 C | Zona=Oscura | pc=9
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=85 min | Zona=Oscura
@@ -93,7 +93,7 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 
 ⏱️  t=90 min | Zona=Oscura
 [P1] t= 90 min | Temp=105 C | Zona=Oscura | pc=10
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=95 min | Zona=Oscura
@@ -102,18 +102,18 @@ Dataset cargado: ../data/dataset_case2.txt (64 muestras)
 [OS] UART=0B pend | Cooling=ON
 
 ===== RESUMEN =====
-Context switches: 20 | Abruptos: 0
-Pérdidas (B): P1=0, P3=0, P2=0
+Context switches: 20 | Abruptos: 10
+Pérdidas (B): P1=40, P3=0, P2=0
 Interrupciones detectadas: 10
 
 ===== METRICAS ESCENARIO 3 =====
-Texe total: 50.690 ms
+Texe total: 50.695 ms
 Interrupciones por anomalías (T>=100 C): 10
-Tiempo scheduler (busy loop): 50.000 ms
+Tiempo scheduler (busy loop): 50.005 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           80.000 |         8.000 |   1.00 x
+  P1    |           81.000 |         8.100 |   1.00 x
   P3    |            0.000 |         0.000 |   0.00 x
-  P2    |           70.000 |         7.000 |   1.14 x
+  P2    |           68.000 |         6.800 |   1.19 x
 
 CPU Occupation: 98.93 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

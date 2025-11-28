@@ -1,5 +1,5 @@
 ===== ESCENARIO 1 – BASELINE =====
-Dataset cargado: ../data/dataset_case3.txt (64 muestras)
+Dataset cargado: ../data/dataset_case3.txt (200 muestras)
 
 [00 min] Zona LUMINOSA
 [P1] Temp leída: 78 C
@@ -165,11 +165,11 @@ Dataset cargado: ../data/dataset_case3.txt (64 muestras)
 
 ===== METRICAS ESCENARIO 1 =====
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (relativo)
-  P1    |           18.000 |         0.900 |  26.83 x
-  P2    |           12.000 |         0.600 |  40.25 x
-  P3    |          483.000 |        24.150 |   1.00 x
+  P1    |           18.000 |         0.900 |  26.72 x
+  P2    |           14.000 |         0.700 |  34.36 x
+  P3    |          481.000 |        24.050 |   1.00 x
 
 Tiempo scheduler (busy loop): 140.019 ms
 Total runtime: 141.070 ms
 CPU Occupation: 99.62 % (sobre tiempo medido en procesos + scheduler)
-Mem. Occupation: 0.30 KB (dataset + métricas)
+Mem. Occupation: 0.83 KB (dataset + métricas)

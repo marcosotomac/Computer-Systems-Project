@@ -1,5 +1,5 @@
 === ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
-Dataset cargado: ../data/dataset_case4.txt (64 muestras)
+Dataset cargado: ../data/dataset_case4.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=95 C | Zona=Luminosa | pc=1
@@ -22,7 +22,7 @@ Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 
 ⏱️  t=15 min | Zona=Luminosa
 [P1] t= 15 min | Temp=101 C | Zona=Luminosa | pc=2
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=6B pend | Cooling=ON
 
 ⏱️  t=20 min | Zona=Luminosa
@@ -47,7 +47,7 @@ Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 
 ⏱️  t=40 min | Zona=Luminosa
 [P1] t= 40 min | Temp=104 C | Zona=Luminosa | pc=4
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=45 min | Zona=Oscura
@@ -91,7 +91,7 @@ Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 
 ⏱️  t=80 min | Zona=Oscura
 [P1] t= 80 min | Temp=105 C | Zona=Oscura | pc=7
-↔️  Cambio de contexto P1 -> P2
+🔁 Cambio ABRUPTO P1 -> P2 | pérdida=4B
 [OS] UART=0B pend | Cooling=ON
 
 ⏱️  t=85 min | Zona=Oscura
@@ -114,18 +114,18 @@ Dataset cargado: ../data/dataset_case4.txt (64 muestras)
 [OS] UART=5B pend | Cooling=ON
 
 ===== RESUMEN =====
-Context switches: 20 | Abruptos: 0
-Pérdidas (B): P1=0, P3=0, P2=0
+Context switches: 20 | Abruptos: 3
+Pérdidas (B): P1=12, P3=0, P2=0
 Interrupciones detectadas: 3
 
 ===== METRICAS ESCENARIO 3 =====
-Texe total: 50.776 ms
+Texe total: 50.778 ms
 Interrupciones por anomalías (T>=100 C): 3
-Tiempo scheduler (busy loop): 50.007 ms
+Tiempo scheduler (busy loop): 50.008 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           65.000 |         8.125 |   3.03 x
-  P3    |          123.000 |        24.600 |   1.00 x
-  P2    |           47.000 |         6.714 |   3.66 x
+  P1    |           64.000 |         8.000 |   3.10 x
+  P3    |          124.000 |        24.800 |   1.00 x
+  P2    |           47.000 |         6.714 |   3.69 x
 
 CPU Occupation: 98.95 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

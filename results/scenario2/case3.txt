@@ -1,5 +1,5 @@
 === ESCENARIO 2: Prioridad impuesta (P1 > P3 > P2) ===
-Dataset cargado: ../data/dataset_case3.txt (64 muestras)
+Dataset cargado: ../data/dataset_case3.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=78 C | Zona=Luminosa | pc=1
@@ -123,13 +123,13 @@ Pérdidas (B): P1=0, P3=0, P2=0
 Interrupciones detectadas: 0
 
 ===== METRICAS ESCENARIO 2 =====
-Texe total: 50.802 ms
+Texe total: 50.803 ms
 Interrupciones por anomalías (T>=100 C): 0
 Tiempo scheduler (busy loop): 50.008 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
   P1    |           56.000 |         8.000 |   2.93 x
   P3    |          164.000 |        23.429 |   1.00 x
-  P2    |           41.000 |         6.833 |   3.43 x
+  P2    |           42.000 |         7.000 |   3.35 x
 
 CPU Occupation: 98.95 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)

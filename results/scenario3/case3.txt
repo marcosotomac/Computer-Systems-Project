@@ -1,5 +1,5 @@
 === ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
-Dataset cargado: ../data/dataset_case3.txt (64 muestras)
+Dataset cargado: ../data/dataset_case3.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P1] t=  0 min | Temp=78 C | Zona=Luminosa | pc=1
@@ -127,9 +127,9 @@ Texe total: 50.802 ms
 Interrupciones por anomalías (T>=100 C): 0
 Tiempo scheduler (busy loop): 50.009 ms
 Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs más lento)
-  P1    |           57.000 |         8.143 |   2.86 x
-  P3    |          163.000 |        23.286 |   1.00 x
-  P2    |           41.000 |         6.833 |   3.41 x
+  P1    |           57.000 |         8.143 |   2.88 x
+  P3    |          164.000 |        23.429 |   1.00 x
+  P2    |           40.000 |         6.667 |   3.51 x
 
 CPU Occupation: 98.95 %
-Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+Mem. Occupation: 1.20 KB (dataset + buffers + PCB)
