@@ -11,7 +11,7 @@
 #define ANOMALY_TH  100
 
 #define DATASET_REQUIRED_SAMPLES (ORBIT_TIME_MIN / STEP_MIN)
-#define MAX_DATASET_SAMPLES      64
+#define MAX_DATASET_SAMPLES      256
 #define DEFAULT_DATASET_PATH "../data/dataset_case1.txt"
 
 extern int P1(int zone);
@@ -24,13 +24,14 @@ static const proc_id_t PRIORITY_ORDER[3] = { PID_P2, PID_P1, PID_P3 };
 
 typedef struct {
     proc_id_t pid;
-    const char *name;
-    int pc;
-    int active;
-    int dirty;
-    int lost_bytes;
+    const char *name; //nombre del proceso
+    int pc; //program counter
+    int active; //indica si el proceso esta activo
+    int dirty; //indica si el proceso esta sucio
+    int lost_bytes; //indica la cantidad de bytes perdidos
 } pcb_t;
 
+//variables globales
 static int minute_sim = 0;
 static int temperature = 0;
 static int cooling_on = 0;
@@ -142,8 +143,8 @@ static void load_dataset_or_exit(const char *path) {
 static int are_consecutive(proc_id_t a, proc_id_t b) {
     for (int i = 0; i < 3; ++i) {
         if (PRIORITY_ORDER[i] == a) {
-            if (i > 0 && PRIORITY_ORDER[i - 1] == b) return 1;
-            if (i < 2 && PRIORITY_ORDER[i + 1] == b) return 1;
+            if (i > 0 && PRIORITY_ORDER[i - 1] == b) return 1; // si el proceso a esta en la posicion i y el proceso b esta en la posicion i-1
+            if (i < 2 && PRIORITY_ORDER[i + 1] == b) return 1; // si el proceso a esta en la posicion i y el proceso b esta en la posicion i+1
         }
     }
     return 0;
@@ -208,8 +209,7 @@ static void context_switch(pcb_t *from, pcb_t *to, int abrupt) {
     if (from->pid == to->pid) return;
     context_switches++;
 
-    int non_consecutive = !are_consecutive(from->pid, to->pid);
-    if (abrupt && non_consecutive) {
+    if (abrupt) {
         abrupt_switches++;
         int lost = 0;
         if (from->dirty) {

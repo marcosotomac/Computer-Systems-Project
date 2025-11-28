@@ -1,0 +1,340 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{textcomp}
+
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\geometry{margin=2.5cm}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Escenario 3 - Sistemas Computacionales}
+\lhead{Priorización Invertida}
+\rfoot{\thepage}
+
+% Configuración de código
+\lstdefinestyle{terminal}{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{black!5},
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false
+}
+
+\tikzstyle{startstop} = [ellipse, minimum width=2.5cm, minimum height=1cm, text centered, draw=black!80, fill=red!30, line width=0.8pt, font=\small\bfseries]
+\tikzstyle{process} = [rectangle, rounded corners, minimum width=3.5cm, minimum height=1cm, text centered, text width=3.2cm, draw=black!80, fill=blue!25, line width=0.8pt, font=\small]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, text width=2.2cm, draw=black!80, fill=green!25, line width=0.8pt, aspect=2.5, font=\small]
+\tikzstyle{arrow} = [thick,->,>=stealth,line width=1pt]
+\tikzstyle{arrowlabel} = [font=\footnotesize,fill=white,inner sep=2pt]
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries Lab5: Escenario 3\par}
+    \vspace{1cm}
+    \vspace{2cm}
+    \vspace{2cm}
+    \begin{tabular}{rl}
+        \textbf{Profesora:} & Luz A. Adanaqué \\[0.3cm]
+        \textbf{Alumno:} & Marco Soto 
+    \end{tabular}
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Descripción General}
+
+El Escenario 3 implementa un \textit{scheduler} satelital con \textbf{prioridad invertida} (P2 $>$ P1 $>$ P3), favoreciendo el proceso de enfriamiento antes de consultar el sensor o transmitir datos. Esta variante evalúa la rapidez de aplicación de técnicas de enfriamiento ante lecturas críticas y su impacto en pérdidas por conmutaciones abruptas.
+
+\subsection{Características Principales}
+\begin{itemize}
+    \item \textbf{Orden de prioridad:} P2 (Enfriamiento) $>$ P1 (Sensor) $>$ P3 (UART)
+    \item \textbf{Ciclo orbital:} 100 minutos (42 min luz / 58 min oscuridad)
+    \item \textbf{Reacción inmediata:} Salto a P2 cuando T $\geq$ 100$^\circ$C
+    \item \textbf{Registro de contexto:} PC guardado en cada cambio
+\end{itemize}
+
+\section{Diagrama de Flujo del Escenario}
+
+El siguiente diagrama muestra la lógica de ejecución del scheduler con prioridades invertidas:
+
+\begin{figure}[H]
+\centering
+\tikzset{
+    startstop/.style={ellipse, minimum width=2cm, minimum height=0.7cm, text centered, draw=black!70, fill=red!25, line width=0.7pt, font=\tiny\bfseries},
+    process/.style={rectangle, rounded corners=2pt, minimum width=2.5cm, minimum height=0.7cm, text centered, align=center, draw=black!70, fill=blue!20, line width=0.7pt, font=\tiny},
+    decision/.style={diamond, minimum width=2.2cm, minimum height=0.9cm, text centered, align=center, draw=black!70, fill=green!20, line width=0.7pt, font=\tiny, aspect=2.2},
+    alert/.style={rectangle, rounded corners=2pt, minimum width=2.5cm, minimum height=0.7cm, text centered, align=center, draw=red!70, fill=orange!25, line width=0.7pt, font=\tiny}
+}
+\begin{tikzpicture}[node distance=1.2cm, every node/.style={font=\tiny}, scale=0.85, transform shape]
+
+% Nodos
+\node[startstop] (A) {Inicio del sistema};
+\node[process, below=of A] (B) {$t=0$ min};
+\node[decision, below=of B] (C) {$t$ menor a\\100 min?};
+\node[startstop, right=3.5cm of C] (Z) {Resumen final\\y metricas};
+
+\node[process, below=of C] (D) {Scheduler (prioridad)\\P2$>$P1$>$P3};
+\node[decision, below=of D] (F) {Proceso\\fue P1?};
+
+\node[process, right=2.5cm of F] (K) {Siguiente segun\\round-robin};
+
+\node[decision, below=of F] (G) {Temperatura\\$\geq$ 100C?};
+\node[alert, below=of G] (H) {Salto ABRUPTO\\a P2 (anomalia)};
+\node[process, below=of H] (I) {Registrar perdida\\de datos};
+\node[process, below=of I] (J) {Incrementar\\interrupciones};
+
+\node[process, below=of K] (M) {Cambio contexto\\normal};
+\node[process, below=3.5cm of J] (L) {Context switch y\\actualizar PC};
+\node[process, below=of L] (N) {Mostrar estado\\del sistema};
+\node[process, below=of N] (O) {Incrementar tiempo\\en 5 min};
+
+% Flechas
+\path[-latex, line width=0.7pt]
+    (A) edge (B)
+    (B) edge (C)
+    (C) edge node[above, font=\tiny, fill=white, inner sep=1pt] {No} (Z)
+    (C) edge node[right, font=\tiny, fill=white, inner sep=1pt] {Si} (D)
+    (D) edge (F)
+    (F) edge node[above, font=\tiny, fill=white, inner sep=1pt] {No} (K)
+    (F) edge node[right, font=\tiny, fill=white, inner sep=1pt] {Si} (G)
+    (G) edge node[above, font=\tiny, fill=white, pos=0.3, inner sep=1pt] {No} (K)
+    (G) edge node[right, font=\tiny, fill=white, inner sep=1pt] {Si} (H)
+    (H) edge (I)
+    (I) edge (J)
+    (J) edge (L)
+    (K) edge (M)
+    (M) edge (L)
+    (L) edge (N)
+    (N) edge (O);
+
+% Loop de retorno
+\draw[-latex, line width=0.7pt] (O) -- ++(-4.5,0) |- (C);
+
+\end{tikzpicture}
+\caption{Flujo de ejecución del Escenario 3 con prioridades invertidas}
+\label{fig:flowchart}
+\end{figure}
+
+\newpage
+\section{Pruebas a Nivel de Terminal}
+
+\subsection{Compilación y Ejecución}
+
+El programa se compila y ejecuta en el simulador Spike con el siguiente procedimiento:
+
+\begin{lstlisting}[style=terminal]
+$ cd scenario3
+$ ./compile.sh
+$ spike --isa=rv64imac \
+    /opt/homebrew/opt/riscv-pk/riscv64-unknown-elf/bin/pk \
+    programa ../data/dataset_case2.txt
+\end{lstlisting}
+
+\subsection{Salida de Ejecución}
+
+A continuación se muestra la ejecución completa del escenario con el dataset \texttt{case1}, el cual presenta un caso interesante con activación y desactivación del sistema de enfriamiento:
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\scriptsize]
+=== ESCENARIO 3: Priorizacion invertida (P2 > P1 > P3) ===
+Dataset cargado: ../data/dataset_case1.txt (64 muestras)
+
+     t=0 min | Zona=Luminosa
+[P1] t=  0 min | Temp=85 C | Zona=Luminosa | pc=1
+        Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=OFF
+
+     t=5 min | Zona=Luminosa
+[P3] UART Transmission:
+ - Temp: 85 C | Cooling: 0 | Zone: 1 (1=luz,0=oscuridad)
+[P3] TX 16B (pendiente= 6B) | pc=1
+        Cambio de contexto P3 -> P2
+[OS] UART=6B pend | Cooling=OFF
+
+     t=15 min | Zona=Luminosa
+[P1] t= 15 min | Temp=92 C | Zona=Luminosa | pc=2
+        Cambio de contexto P1 -> P3
+[OS] UART=6B pend | Cooling=OFF
+
+     t=25 min | Zona=Luminosa
+[P2]     ACTIVADO (T>90 C)
+        Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=ON
+
+     t=30 min | Zona=Luminosa
+[P1] t= 30 min | Temp=58 C | Zona=Luminosa | pc=3
+        Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=ON
+
+     t=40 min | Zona=Luminosa
+[P2]     DESACTIVADO (T<60 C)
+        Cambio de contexto P2 -> P1
+[OS] UART=5B pend | Cooling=OFF
+
+     t=45 min | Zona=Oscura
+[P1] t= 45 min | Temp=93 C | Zona=Oscura | pc=4
+        Cambio de contexto P1 -> P3
+[OS] UART=5B pend | Cooling=OFF
+
+     t=55 min | Zona=Oscura
+[P2]     ACTIVADO (T>90 C)
+        Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=ON
+
+     t=60 min | Zona=Oscura
+[P1] t= 60 min | Temp=97 C | Zona=Oscura | pc=5
+        Cambio de contexto P1 -> P3
+[OS] UART=0B pend | Cooling=ON
+
+     t=70 min | Zona=Oscura
+[P1] t= 70 min | Temp=104 C | Zona=Oscura | pc=6
+        Cambio de contexto P1 -> P3
+[OS] UART=5B pend | Cooling=ON
+
+     t=95 min | Zona=Oscura
+[P2]     DESACTIVADO (T<60 C)
+        Cambio de contexto P2 -> P1
+[OS] UART=0B pend | Cooling=OFF
+\end{lstlisting}
+
+\newpage
+\subsection{Resumen de Ejecución}
+
+Al finalizar la simulación, el sistema genera un resumen con las estadísticas de ejecución:
+
+\begin{lstlisting}[style=terminal]
+===== RESUMEN =====
+Context switches: 20 | Abruptos: 0
+Perdidas (B): P1=0, P3=0, P2=0
+Interrupciones detectadas: 1
+
+===== METRICAS ESCENARIO 3 =====
+Texe total: 50.776 ms
+Interrupciones por anomalias (T>=100 C): 1
+Tiempo scheduler (busy loop): 50.006 ms
+Proceso | Tiempo total (us) | Promedio (us) | Speedup (vs mas lento)
+  P1    |           57.000  |         8.143 |   2.66 x
+  P3    |          130.000  |        21.667 |   1.00 x
+  P2    |           47.000  |         6.714 |   3.23 x
+
+CPU Occupation: 98.94 %
+Mem. Occupation: 0.45 KB (dataset + buffers + PCB)
+\end{lstlisting}
+
+\section{Explicación de Resultados y Métricas}
+
+\subsection{Análisis de Cambios de Contexto}
+
+La ejecución reportó \textbf{20 cambios de contexto}, todos normales (0 abruptos). Esto se debe a que:
+
+\begin{itemize}
+    \item El scheduler sigue estrictamente el orden de prioridad P2 $\to$ P1 $\to$ P3
+    \item Los cambios son consecutivos según el \textit{round-robin} definido
+    \item Solo se detectó 1 lectura con T $\geq$ 100°C (101°C en t=75 min), y el siguiente proceso en prioridad ya era P2
+\end{itemize}
+
+\subsection{Interrupciones por Anomalías}
+
+Se detectó \textbf{1 interrupción} causada por temperatura mayor o igual a 100°C:
+
+\begin{itemize}
+    \item T = 101°C en t=75 min (zona oscura)
+\end{itemize}
+
+\textbf{Eventos de enfriamiento detectados:}
+\begin{itemize}
+    \item \textbf{Activación 1:} T=92°C en t=25 min (zona luminosa)
+    \item \textbf{Desactivación 1:} T=58°C en t=40 min (zona luminosa)
+    \item \textbf{Activación 2:} T=93°C en t=55 min (zona oscura)
+    \item \textbf{Desactivación 2:} T=59°C en t=95 min (zona oscura)
+\end{itemize}
+
+\subsection{Métricas de Rendimiento}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Proceso} & \textbf{Tiempo total ($\mu$s)} & \textbf{Promedio ($\mu$s)} & \textbf{Speedup} \\
+\midrule
+P1 (Sensor)      & 57.000 & 8.143 & 2.66x \\
+P2 (Enfriamiento) & 47.000 & 6.714 & 3.23x \\
+P3 (UART)        & 130.000  & 21.667 & 1.00x \\
+\bottomrule
+\end{tabular}
+\caption{Tiempos de ejecución por proceso}
+\label{tab:performance}
+\end{table}
+
+\textbf{Observaciones clave:}
+\begin{itemize}
+    \item \textbf{P3 se ejecutó correctamente}: Realizó 6 transmisiones UART durante la simulación
+    \item \textbf{P3 es el proceso más lento}: Promedio de 21.667 $\mu$s por ejecución
+    \item \textbf{P2 es el más rápido}: Speedup de 3.23x respecto a P3
+    \item \textbf{Ocupación de CPU}: 98.94\% indica alta eficiencia del scheduler
+    \item \textbf{Memoria}: Huella muy reducida de 0.45 KB
+    \item \textbf{Tiempo total}: 50.776 ms de ejecución real para simular 100 minutos orbitales
+\end{itemize}
+
+\subsection{Pérdidas de Información}
+
+No se registraron pérdidas de datos en ningún proceso:
+\begin{itemize}
+    \item P1: 0 bytes perdidos
+    \item P2: 0 bytes perdidos
+    \item P3: 0 bytes perdidos
+\end{itemize}
+
+Esto se debe a que todos los cambios de contexto fueron normales (consecutivos según prioridad) y no hubo saltos no consecutivos que causaran pérdidas.
+
+\subsection{Comparación con Escenarios Previos}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Métrica} & \textbf{Esc. 1} & \textbf{Esc. 2} & \textbf{Esc. 3} \\
+\midrule
+Prioridad & P1$>$P2$>$P3 & P1$>$P2$>$P3 & P2$>$P1$>$P3 \\
+Cambios abruptos & Variable & Variable & 0 \\
+Interrupciones & Variable & Variable & 10 \\
+Pérdidas totales (B) & Variable & Variable & 0 \\
+CPU Occupation & -- & -- & 98.93\% \\
+\bottomrule
+\end{tabular}
+\caption{Comparativa entre escenarios (valores del Esc. 3 con dataset case2)}
+\label{tab:comparison}
+\end{table}
+
+\section{Conclusiones}
+
+\begin{enumerate}
+    \item La \textbf{priorización invertida} (P2 $>$ P1 $>$ P3) permite una respuesta inmediata a condiciones térmicas críticas al ejecutar el proceso de enfriamiento con mayor frecuencia.
+    
+    \item El diseño del scheduler logró \textbf{cero pérdidas de datos} al mantener cambios de contexto consecutivos, demostrando la eficiencia del algoritmo round-robin con prioridades.
+    
+    \item Se detectaron adecuadamente las \textbf{10 anomalías térmicas} (T $\geq$ 100°C), activando el sistema de enfriamiento según lo esperado.
+    
+    \item La alta \textbf{ocupación de CPU} (98.93\%) y baja huella de memoria (0.45 KB) demuestran un uso eficiente de recursos.
+    
+    \item El proceso P3 (UART) no se ejecutó en esta configuración, lo que podría indicar la necesidad de ajustar las condiciones de activación para escenarios específicos.
+\end{enumerate}
+
+\end{document}

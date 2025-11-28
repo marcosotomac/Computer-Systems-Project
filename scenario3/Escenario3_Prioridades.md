@@ -37,7 +37,7 @@ Esta variante busca evaluar qué tan rápido se pueden aplicar técnicas de enfr
 
 ## Lógica de funcionamiento
 
-1. **Carga de dataset:** Igual que en los demás escenarios, se cargan 20 muestras determinísticas desde `../data/dataset_case*.txt` (se mantienen como archivos de texto, sin embebido).
+1. **Carga de dataset:** Igual que en los demás escenarios, se cargan 200 muestras determinísticas desde `../data/dataset_case*.txt` (se mantienen como archivos de texto, sin embebido; la simulación consume al menos 20).
 2. **Prioridades invertidas:** El OS ejecuta los procesos siguiendo `P2 → P1 → P3`. `P2` puede ejecutarse incluso con la última temperatura conocida mientras espera una nueva lectura.
 3. **Eventos anómalos:** Si `P1` registra una temperatura ≥100 °C, se produce un salto inmediato (no consecutivo) hacia `P2` para aplicar cooling.
 4. **Cambio de contexto:** Se guarda el _program counter_ de cada proceso y se notifica si el salto fue normal (`↔️`) o abrupto (`🔁`).
@@ -93,7 +93,7 @@ spike --isa=rv64imac \
 
 ```
 === ESCENARIO 3: Priorización invertida (P2 > P1 > P3) ===
-Dataset cargado: ../data/dataset_case2.txt (20 muestras)
+Dataset cargado: ../data/dataset_case2.txt (200 muestras)
 
 ⏱️  t=0 min | Zona=Luminosa
 [P2] Estado=OFF | pc=1
